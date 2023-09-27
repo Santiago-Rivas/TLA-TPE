@@ -8,6 +8,6 @@ cd "$ROOT"
 echo "Building the compiler..."
 cmake -S .. -B ../bin
 cd ../bin
-make
+make clean && make all
 
 echo "All done."
