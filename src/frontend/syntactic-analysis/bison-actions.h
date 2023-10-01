@@ -14,18 +14,21 @@
 // Programa.
 int ProgramGrammarAction(const int value);
 
-// Expresión.
-int AdditionExpressionGrammarAction(const int leftValue, const int rightValue);
-int SubtractionExpressionGrammarAction(const int leftValue, const int rightValue);
-int MultiplicationExpressionGrammarAction(const int leftValue, const int rightValue);
-int DivisionExpressionGrammarAction(const int leftValue, const int rightValue);
-int FactorExpressionGrammarAction(const int value);
+// Component.
+int AssignGrammarAction(const int value, const int rValue);
+int ComponentGrammarAction(const int value);
 
-// Factores.
-int ExpressionFactorGrammarAction(const int value);
-int ConstantFactorGrammarAction(const int value);
+// Params.
+int PairParamsGrammarAction(const int value);
+int ExpressionParamsGrammarAction(const int value);
+int ConstantParamsGrammarAction(const int value);
+int FullSizeParamsGrammarAction(const int value1, const int value2);
+
+// Pair
+int PairGrammarAction(const int value1, const int value2);
 
 // Constantes.
 int IntegerConstantGrammarAction(const int value);
+int IdentifierConstantGrammarAction(const int value);
 
 #endif

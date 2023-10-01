@@ -2,6 +2,7 @@
 #include "../../backend/support/logger.h"
 #include "bison-actions.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /**
@@ -49,42 +50,56 @@ int ProgramGrammarAction(const int value) {
 	return value;
 }
 
-int AdditionExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("[Bison] AdditionExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Add(leftValue, rightValue);
-}
+// Component
 
-int SubtractionExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("[Bison] SubtractionExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Subtract(leftValue, rightValue);
-}
-
-int MultiplicationExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("[Bison] MultiplicationExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Multiply(leftValue, rightValue);
-}
-
-int DivisionExpressionGrammarAction(const int leftValue, const int rightValue) {
-	LogDebug("[Bison] DivisionExpressionGrammarAction(%d, %d)", leftValue, rightValue);
-	return Divide(leftValue, rightValue);
-}
-
-int FactorExpressionGrammarAction(const int value) {
-	LogDebug("[Bison] FactorExpressionGrammarAction(%d)", value);
+int AssignGrammarAction(const int value, const int rValue) {
+	LogDebug("[Bison] AssignExpressionGrammarAction(%d = %d)", value, rValue);
 	return value;
 }
 
-int ExpressionFactorGrammarAction(const int value) {
+int ComponentGrammarAction(const int value) {
+	LogDebug("[Bison] ComponentExpressionGrammarAction(%d)", value);
+	return value;
+}
+
+// Params
+
+int PairParamsGrammarAction(const int value) {
+	LogDebug("[Bison] PairParamsGrammarAction(%d)", value);
+	return value;
+}
+
+int ExpressionParamsGrammarAction(const int value) {
 	LogDebug("[Bison] ExpressionFactorGrammarAction(%d)", value);
 	return value;
 }
 
-int ConstantFactorGrammarAction(const int value) {
+int ConstantParamsGrammarAction(const int value) {
 	LogDebug("[Bison] ConstantFactorGrammarAction(%d)", value);
 	return value;
 }
 
+
+int FullSizeParamsGrammarAction(const int value1, const int value2) {
+	LogDebug("[Bison] FullSizeParamsGrammarAction({%d} %d)", value1, value2);
+	return value1;
+}
+
+// Pair
+
+int PairGrammarAction(const int value1, const int value2) {
+	LogDebug("[Bison] PairFactorGrammarAction({%d, %d})", value1, value2);
+	return value1;
+}
+
+// Constantes
+
 int IntegerConstantGrammarAction(const int value) {
 	LogDebug("[Bison] IntegerConstantGrammarAction(%d)", value);
+	return value;
+}
+
+int IdentifierConstantGrammarAction(const int value) {
+	LogDebug("[Bison] IdentifierConstantGrammarAction(%d)", value);
 	return value;
 }

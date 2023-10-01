@@ -33,36 +33,42 @@ void EndCommentPatternAction() {
 	LogDebug("[Flex] [COMMENT] EndCommentPatternAction..............................");
 }
 
-token AdditionOperatorPatternAction() {
-	LogDebug("[Flex] AdditionOperatorPatternAction: '+'.");
-	yylval.token = ADD;
-	return ADD;
-}
-
-token CloseParenthesisPatternAction() {
-	LogDebug("[Flex] CloseParenthesisPatternAction: ')'.");
-	yylval.token = CLOSE_PARENTHESIS;
-	return CLOSE_PARENTHESIS;
-}
-
-token DivisionOperatorPatternAction() {
-	LogDebug("[Flex] DivisionOperatorPatternAction: '/'.");
-	yylval.token = DIV;
-	return DIV;
-}
-
-token IntegerPatternAction(const char * lexeme, const int length) {
-	LogDebug("[Flex] IntegerPatternAction: '%s' (length = %d).", lexeme, length);
-	char * lexemeCopy = copyLexeme(lexeme, length);
-	yylval.integer = atoi(lexemeCopy);
+token ComponentOperatorPatternAction(const char* lexeme, const int lenght) {
+	char* lexemeCopy = copyLexeme(lexeme, lenght);
+	LogDebug("[Flex] ComponentOperatorPatternAction: %s", lexemeCopy);
 	free(lexemeCopy);
-	return INTEGER;
+	yylval.component = COMPONENT;
+	return COMPONENT;
 }
 
-token MultiplicationOperatorPatternAction() {
-	LogDebug("[Flex] MultiplicationOperatorPatternAction: '*'.");
-	yylval.token = MUL;
-	return MUL;
+token CommaPatternaction() {
+	LogDebug("[Flex] CommaPatternaction: ','.");
+	yylval.token = COMMA;
+	return COMMA;
+}
+
+token OpenBracketsPatternAction() {
+	LogDebug("[Flex] OpenBracketsPatternAction: '{'.");
+	yylval.token = OPEN_BRACKET;
+	return OPEN_BRACKET;
+}
+
+token CloseBracketsPatternAction() {
+	LogDebug("[Flex] CloseBracketsPatternAction: '}'.");
+	yylval.token = CLOSE_BRACKET;
+	return CLOSE_BRACKET;
+}
+
+token OpenSquareBracketsPatternAction() {
+	LogDebug("[Flex] OpenSquareBracketsPatternAction: '['.");
+	yylval.token = OPEN_SQUAREDBRACKET;
+	return OPEN_SQUAREDBRACKET;
+}
+
+token CloseSquareBracketsPatternAction() {
+	LogDebug("[Flex] OpenSquareBracketsPatternAction: ']'.");
+	yylval.token = CLOSE_SQUAREDBRACKET;
+	return CLOSE_SQUAREDBRACKET;
 }
 
 token OpenParenthesisPatternAction() {
@@ -71,10 +77,76 @@ token OpenParenthesisPatternAction() {
 	return OPEN_PARENTHESIS;
 }
 
-token SubtractionOperatorPatternAction() {
-	LogDebug("[Flex] SubtractionOperatorPatternAction: '-'.");
-	yylval.token = SUB;
-	return SUB;
+token CloseParenthesisPatternAction() {
+	LogDebug("[Flex] CloseParenthesisPatternAction: ')'.");
+	yylval.token = CLOSE_PARENTHESIS;
+	return CLOSE_PARENTHESIS;
+}
+
+token IntegerPatternAction(const char * lexeme, const int length) {
+	char * lexemeCopy = copyLexeme(lexeme, length);
+	LogDebug("[Flex] IntegerPatternAction: '%s' (length = %d).", lexemeCopy, length);
+	free(lexemeCopy);
+	yylval.integer = INTEGER;
+	return INTEGER;
+}
+
+token AssignOperatorPatternAction() {
+	LogDebug("[Flex] AssignOpperatorPatternAction: '='.");
+	yylval.constant = ASSIGN;
+	return ASSIGN;
+}
+
+token IdentifierPatterAction(const char * lexeme, const int length) {
+	char* lexemeCopy = copyLexeme(lexeme, length);
+	LogDebug("[Flex] IdentifierPatternAction: '%s' (lenght = %d).", lexemeCopy, length);
+	free(lexemeCopy);
+	yylval.identifier = (char*) IDENTIFIER;
+	return IDENTIFIER;
+}
+
+token StartPatternAction(const char * lexeme, const int length) {
+	char* lexemeCopy = copyLexeme(lexeme, length);
+	LogDebug("[Flex] StartPatternAction: 'start'.");
+	free(lexemeCopy);
+	yylval.beggin = BEGGIN;
+	return BEGGIN;
+}
+
+token MeshPatternAction(const char * lexeme, const int length) {
+	char* lexemeCopy = copyLexeme(lexeme, length);
+	LogDebug("[Flex] MeshPatternAction: 'mesh'.");
+	free(lexemeCopy);
+	yylval.mesh = MESH;
+	return MESH;
+}
+token EndPatternAction(const char * lexeme, const int length) {
+	char* lexemeCopy = copyLexeme(lexeme, length);
+	LogDebug("[Flex] EndPatternAction: 'end'.");
+	free(lexemeCopy);
+	yylval.end = END;
+	return END;
+}
+
+token EndLinePatternAction() {
+	LogDebug("[Flex] EndLinePatternAction: '\\n'.");
+	yylval.semicolon = SEMICOLON;
+	return SEMICOLON;
+}
+
+token StringPatternAction() {
+	LogDebug("[Flex] StringPatternAction: '\"'.");
+	yylval.string = STRING;
+	return STRING;
+}
+
+
+token ColorComponentOperatorPatternAction(const char* lexeme, const int length) {
+	char* lexemeCopy = copyLexeme(lexeme, length);
+	LogDebug("[Flex] ColorComponentOperatorPatternAction: '%s'.", lexemeCopy);
+	free(lexemeCopy);
+	yylval.color = COLOR;
+	return COLOR;
 }
 
 token UnknownPatternAction(const char * lexeme, const int length) {

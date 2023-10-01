@@ -1,0 +1,6 @@
+red resistance({4, "volt"})
+battery({4, "volt"}, "hola")
+start mesh
+green resistance({4, "V"})
+blue battery({4, "A"}, "mA")
+end mesh

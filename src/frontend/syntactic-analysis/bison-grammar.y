@@ -17,59 +17,94 @@
 
 	// No-terminales (frontend).
 	int program;
-	int expression;
-	int factor;
 	int constant;
+	char * identifier;
+	int params;
+	int component;
+	int pair;
+	int beggin;
+	int mesh;
+	int end;
+	int string;
+	int color;
 
 	// Terminales.
 	token token;
 	int integer;
+	int semicolon;
+
 }
 
 // Un token que jamás debe ser usado en la gramática.
 %token <token> ERROR
 
 // IDs y tipos de los tokens terminales generados desde Flex.
-%token <token> ADD
-%token <token> SUB
-%token <token> MUL
-%token <token> DIV
+%token <token> COMPONENT
+
+%token <token> ASSIGN
+%token <token> COMMA
+%token <token> SEMICOLON
 
 %token <token> OPEN_PARENTHESIS
 %token <token> CLOSE_PARENTHESIS
 
+%token <token> OPEN_BRACKET
+%token <token> CLOSE_BRACKET
+
+%token <token> OPEN_SQUAREDBRACKET
+%token <token> CLOSE_SQUAREDBRACKET
+
 %token <integer> INTEGER
+%token <token> IDENTIFIER // token??? (identifier type char*)
+%token <mesh> MESH
+%token <beggin> BEGGIN
+%token <end> END
+%token <color> COLOR
+%token <string> STRING
 
 // Tipos de dato para los no-terminales generados desde Bison.
 %type <program> program
-%type <expression> expression
-%type <factor> factor
 %type <constant> constant
+%type <params> params
+%type <component> component
+%type <pair> pair
 
 // Reglas de asociatividad y precedencia (de menor a mayor).
-%left ADD SUB
-%left MUL DIV
+// %left ADD SUB
+// %left MUL DIV
 
 // El símbolo inicial de la gramatica.
 %start program
 
 %%
 
-program: expression													{ $$ = ProgramGrammarAction($1); }
+program: BEGGIN MESH END MESH														{ $$ = ProgramGrammarAction($1); }
+	| BEGGIN MESH component END MESH												{ $$ = ProgramGrammarAction($3); }
+	| component BEGGIN MESH component END MESH										{ $$ = ProgramGrammarAction($4); }
+	| component BEGGIN MESH END MESH												{ $$ = ProgramGrammarAction($1); }
 	;
 
-expression: expression[left] ADD expression[right]					{ $$ = AdditionExpressionGrammarAction($left, $right); }
-	| expression[left] SUB expression[right]						{ $$ = SubtractionExpressionGrammarAction($left, $right); }
-	| expression[left] MUL expression[right]						{ $$ = MultiplicationExpressionGrammarAction($left, $right); }
-	| expression[left] DIV expression[right]						{ $$ = DivisionExpressionGrammarAction($left, $right); }
-	| factor														{ $$ = FactorExpressionGrammarAction($1); }
+component: COMPONENT params component 												{ $$ = ComponentGrammarAction($1); } 
+	| COMPONENT component 															{ $$ = ComponentGrammarAction($1); }
+	| COMPONENT params 																{ $$ = ComponentGrammarAction($1); }
+	| COMPONENT																		{ $$ = ComponentGrammarAction($1); }
+	| COLOR COMPONENT params component 												{ $$ = ComponentGrammarAction($1); } 
+	| COLOR COMPONENT component 													{ $$ = ComponentGrammarAction($1); }
+	| COLOR COMPONENT params 														{ $$ = ComponentGrammarAction($1); }
+	| COLOR COMPONENT  																{ $$ = ComponentGrammarAction($1); }
 	;
 
-factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactorGrammarAction($2); }
-	| constant														{ $$ = ConstantFactorGrammarAction($1); }
+params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS									{ $$ = ExpressionParamsGrammarAction($2); }
+	| 	OPEN_PARENTHESIS pair CLOSE_PARENTHESIS										{ $$ = PairParamsGrammarAction($2); }
+	| 	OPEN_PARENTHESIS pair COMMA STRING IDENTIFIER STRING CLOSE_PARENTHESIS		{ $$ = FullSizeParamsGrammarAction($2, $4); }
+	| 	constant																	{ $$ = ConstantParamsGrammarAction($1); }
 	;
 
-constant: INTEGER													{ $$ = IntegerConstantGrammarAction($1); }
+pair: OPEN_BRACKET INTEGER COMMA STRING IDENTIFIER STRING CLOSE_BRACKET				{ $$ = PairGrammarAction($2, $4); }
+	;
+
+constant: INTEGER 																	{ $$ = IntegerConstantGrammarAction($1); }
+	| IDENTIFIER																	{ $$ = IdentifierConstantGrammarAction($1); }
 	;
 
 %%
