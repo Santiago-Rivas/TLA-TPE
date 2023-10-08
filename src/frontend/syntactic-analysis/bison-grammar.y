@@ -25,13 +25,13 @@
 	int beggin;
 	int mesh;
 	int end;
-	int string;
+	char * string;
 	int color;
 
 	// Terminales.
 	token token;
 	int integer;
-	int semicolon;
+	int newLine;
 
 }
 
@@ -43,7 +43,7 @@
 
 %token <token> ASSIGN
 %token <token> COMMA
-%token <token> SEMICOLON
+%token <token> NEWLINE
 
 %token <token> OPEN_PARENTHESIS
 %token <token> CLOSE_PARENTHESIS
@@ -78,29 +78,29 @@
 
 %%
 
-program: BEGGIN MESH END MESH														{ $$ = ProgramGrammarAction($1); }
+program: BEGGIN MESH END MESH											 	{ $$ = ProgramGrammarAction($1); }
 	| BEGGIN MESH component END MESH												{ $$ = ProgramGrammarAction($3); }
 	| component BEGGIN MESH component END MESH										{ $$ = ProgramGrammarAction($4); }
 	| component BEGGIN MESH END MESH												{ $$ = ProgramGrammarAction($1); }
 	;
 
-component: COMPONENT params component 												{ $$ = ComponentGrammarAction($1); } 
-	| COMPONENT component 															{ $$ = ComponentGrammarAction($1); }
-	| COMPONENT params 																{ $$ = ComponentGrammarAction($1); }
-	| COMPONENT																		{ $$ = ComponentGrammarAction($1); }
+component: COMPONENT params component  												{ $$ = ComponentGrammarAction($1); } 
+	| COMPONENT component  															{ $$ = ComponentGrammarAction($1); }
+	| COMPONENT params																{ $$ = ComponentGrammarAction($1); }
+	| COMPONENT 																	{ $$ = ComponentGrammarAction($1); }
 	| COLOR COMPONENT params component 												{ $$ = ComponentGrammarAction($1); } 
 	| COLOR COMPONENT component 													{ $$ = ComponentGrammarAction($1); }
-	| COLOR COMPONENT params 														{ $$ = ComponentGrammarAction($1); }
-	| COLOR COMPONENT  																{ $$ = ComponentGrammarAction($1); }
+	| COLOR COMPONENT params  														{ $$ = ComponentGrammarAction($1); }
+	| COLOR COMPONENT   															{ $$ = ComponentGrammarAction($1); }
 	;
 
 params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS									{ $$ = ExpressionParamsGrammarAction($2); }
 	| 	OPEN_PARENTHESIS pair CLOSE_PARENTHESIS										{ $$ = PairParamsGrammarAction($2); }
-	| 	OPEN_PARENTHESIS pair COMMA STRING IDENTIFIER STRING CLOSE_PARENTHESIS		{ $$ = FullSizeParamsGrammarAction($2, $4); }
+	| 	OPEN_PARENTHESIS pair COMMA STRING CLOSE_PARENTHESIS						{ $$ = FullSizeParamsGrammarAction($2, $4); }
 	| 	constant																	{ $$ = ConstantParamsGrammarAction($1); }
 	;
 
-pair: OPEN_BRACKET INTEGER COMMA STRING IDENTIFIER STRING CLOSE_BRACKET				{ $$ = PairGrammarAction($2, $4); }
+pair: OPEN_BRACKET INTEGER COMMA STRING CLOSE_BRACKET								{ $$ = PairGrammarAction($2, $4); }
 	;
 
 constant: INTEGER 																	{ $$ = IntegerConstantGrammarAction($1); }

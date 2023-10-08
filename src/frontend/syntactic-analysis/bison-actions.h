@@ -22,10 +22,10 @@ int ComponentGrammarAction(const int value);
 int PairParamsGrammarAction(const int value);
 int ExpressionParamsGrammarAction(const int value);
 int ConstantParamsGrammarAction(const int value);
-int FullSizeParamsGrammarAction(const int value1, const int value2);
+int FullSizeParamsGrammarAction(const int value1, const char* value2);
 
 // Pair
-int PairGrammarAction(const int value1, const int value2);
+int PairGrammarAction(const int value1, const char* value2);
 
 // Constantes.
 int IntegerConstantGrammarAction(const int value);

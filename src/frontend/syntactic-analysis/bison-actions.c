@@ -80,15 +80,15 @@ int ConstantParamsGrammarAction(const int value) {
 }
 
 
-int FullSizeParamsGrammarAction(const int value1, const int value2) {
-	LogDebug("[Bison] FullSizeParamsGrammarAction({%d} %d)", value1, value2);
+int FullSizeParamsGrammarAction(const int value1, const char* value2) {
+	LogDebug("[Bison] FullSizeParamsGrammarAction({%d} %p)", value1, value2);
 	return value1;
 }
 
 // Pair
 
-int PairGrammarAction(const int value1, const int value2) {
-	LogDebug("[Bison] PairFactorGrammarAction({%d, %d})", value1, value2);
+int PairGrammarAction(const int value1, const char* value2) {
+	LogDebug("[Bison] PairFactorGrammarAction({%d, %p})", value1, value2);
 	return value1;
 }
 

@@ -130,13 +130,15 @@ token EndPatternAction(const char * lexeme, const int length) {
 
 token EndLinePatternAction() {
 	LogDebug("[Flex] EndLinePatternAction: '\\n'.");
-	yylval.semicolon = SEMICOLON;
-	return SEMICOLON;
+	yylval.newLine = NEWLINE;
+	return NEWLINE;
 }
 
-token StringPatternAction() {
-	LogDebug("[Flex] StringPatternAction: '\"'.");
-	yylval.string = STRING;
+token StringPatternAction(const char * lexeme, const int length) {
+	char* lexemeCopy = copyLexeme(lexeme, length);
+	LogDebug("[Flex] StringPatternAction: '%s'.", lexemeCopy);
+	free(lexemeCopy);
+	yylval.string = (char*) STRING;
 	return STRING;
 }
 

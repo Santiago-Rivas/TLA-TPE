@@ -39,7 +39,7 @@ token StartPatternAction(const char * lexeme, const int length);
 token MeshPatternAction(const char * lexeme, const int length);
 token EndPatternAction(const char * lexeme, const int length);
 token EndLinePatternAction();
-token StringPatternAction();
+token StringPatternAction(const char * lexeme, const int length);
 token ColorComponentOperatorPatternAction(const char* lexeme, const int length);
 
 // Patrón desconocido, permite abortar debido a un error de sintaxis.

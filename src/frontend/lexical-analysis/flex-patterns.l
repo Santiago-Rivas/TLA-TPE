@@ -18,9 +18,12 @@
 
 /* Patrones reutilizables. */
 digit			[0-9]
-string          [A-Za-z]|[A-Za-z][A-Za-z0-9]
+identifier      [A-Za-z]|[A-Za-z][A-Za-z0-9]
+string          \"[^\"]*\"
 endline			[\n]
 whitespace		[ \f\n\r\t\v]
+component       [resistance|battery|cable|inductor|ammeter|voltmeter|switch|capacitor|led|trasformer]
+colors          [red|green|blue]
 
 %%
 
@@ -40,34 +43,23 @@ whitespace		[ \f\n\r\t\v]
 
 ","                                         { return CommaPatternaction(yytext); }
 
-"start"                                     { return StartPatternAction(yytext, yyleng); }
-"mesh"                                      { return MeshPatternAction(yytext, yyleng); }
-"end"                                       { return EndPatternAction(yytext, yyleng); }
-
-"resistance"                                { return ComponentOperatorPatternAction(yytext, yyleng); }
-"battery"                                   { return ComponentOperatorPatternAction(yytext, yyleng); }
-"cable"                                     { return ComponentOperatorPatternAction(yytext, yyleng); }
-"inductor"                                  { return ComponentOperatorPatternAction(yytext, yyleng); }
-"ammeter"                                   { return ComponentOperatorPatternAction(yytext, yyleng); }
-"voltmeter"                                 { return ComponentOperatorPatternAction(yytext, yyleng); }
-"switch"                                    { return ComponentOperatorPatternAction(yytext, yyleng); }
-"capacitor"                                 { return ComponentOperatorPatternAction(yytext, yyleng); }
-"led"                                       { return ComponentOperatorPatternAction(yytext, yyleng); }
-"trasformer"                                { return ComponentOperatorPatternAction(yytext, yyleng); }
-
-"red"                                       { return ColorComponentOperatorPatternAction(yytext, yyleng); }
-"green"                                     { return ColorComponentOperatorPatternAction(yytext, yyleng); }
-"blue"                                      { return ColorComponentOperatorPatternAction(yytext, yyleng); }
-
-"\""                                        { return StringPatternAction(yytext); }                                    
+"start"                                     { IgnoredPatternAction(yytext, yyleng); return StartPatternAction(yytext, yyleng); }
+"mesh"                                      { IgnoredPatternAction(yytext, yyleng); return MeshPatternAction(yytext, yyleng); }
+"end"                                       { IgnoredPatternAction(yytext, yyleng); return EndPatternAction(yytext, yyleng); }
 
 "="                                         { return AssignOperatorPatternAction(yytext); }
 
+{colors}*                                   { return ColorComponentOperatorPatternAction(yytext, yyleng); }
+
+{component}+                                { return ComponentOperatorPatternAction(yytext, yyleng); }
+
 {digit}+									{ return IntegerPatternAction(yytext, yyleng); }
 
-{whitespace}+								{ IgnoredPatternAction(yytext, yyleng); }
+{whitespace}*								{ IgnoredPatternAction(yytext, yyleng); }
 
-{string}+                                   { return IdentifierPatterAction(yytext, yyleng); }
+{string}                                    { return StringPatternAction(yytext, yyleng); }                                    
+
+{identifier}+                               { return IdentifierPatterAction(yytext, yyleng); }
 
 .											{ return UnknownPatternAction(yytext, yyleng); }
 
