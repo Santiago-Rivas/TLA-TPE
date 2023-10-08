@@ -95,10 +95,10 @@
 
 %%
 
-program: BEGGIN MESH mesh END MESH								        			 	{ $$ = ProgramGrammarAction($1); }
-	| variables NEWLINE BEGGIN MESH mesh END MESH										{ $$ = ProgramGrammarAction($1); }
+program: BEGGIN MESH NEWLINE mesh END MESH								        			 	{ $$ = ProgramGrammarAction($1); }
+	| variables BEGGIN MESH NEWLINE mesh END MESH										{ $$ = ProgramGrammarAction($1); }
 	| program NEWLINE 													                { $$ = ProgramGrammarAction($1); }
-	| NEWLINE BEGGIN MESH mesh END MESH												            { $$ = ProgramGrammarAction($1); }
+	| NEWLINE BEGGIN MESH NEWLINE mesh END MESH												            { $$ = ProgramGrammarAction($1); }
 	;
 
 function: FUNCTION OPEN_PARENTHESIS NEWLINE  function_params  CLOSE_PARENTHESIS  { $$ = FunctionGrammarAction($1); }
@@ -118,7 +118,7 @@ function_params:OPEN_SQUAREDBRACKET mesh  NEWLINE CLOSE_SQUAREDBRACKET 				   { 
 mesh: mesh NEWLINE 																	{ $$ = MeshGrammarAction($1); }
 	| components 														                    { $$ = MeshGrammarAction($1); }
 	| functions 														                        { $$ = MeshGrammarAction($1); }
-	| variables 														                    { $$ = MeshGrammarAction($1); }
+	| IDENTIFIER NEWLINE                                                                       { $$ = MeshGrammarAction($1); }
 	;
 
 component: COMPONENT params 																 { $$ = ComponentGrammarAction($1); }

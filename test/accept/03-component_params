@@ -1,7 +1,5 @@
 
 start mesh
 Resistance({4, "volt"})
-Battery({4, "volt"}, "hola")
-Resistance({4, "V"})
-Battery({4, "A"}, "mA")
+Battery({4, "volt"}, {4, "volt"}, {1, "volt"})
 end mesh

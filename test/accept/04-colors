@@ -1,6 +1,5 @@
 start mesh
 red Resistance({4, "volt"})
-Battery({4, "volt"}, "hola")
 green Resistance({4, "V"})
-blue Battery({4, "A"}, "mA")
+blue Battery({4, "A"})
 end mesh
