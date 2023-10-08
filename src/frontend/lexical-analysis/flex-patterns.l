@@ -22,8 +22,8 @@ identifier      [A-Za-z]|[A-Za-z][A-Za-z0-9]
 string          \"[^\"]*\"
 endline			[\n]
 whitespace		[ \f\n\r\t\v]
-component       [resistance|battery|cable|inductor|ammeter|voltmeter|switch|capacitor|led|trasformer]
-colors          [red|green|blue]
+component       resistance|battery|cable|inductor|ammeter|voltmeter|switch|capacitor|led|trasformer
+colors          red|green|blue
 
 %%
 
@@ -49,15 +49,15 @@ colors          [red|green|blue]
 
 "="                                         { return AssignOperatorPatternAction(yytext); }
 
-{colors}*                                   { return ColorComponentOperatorPatternAction(yytext, yyleng); }
+{colors}                                    { return ColorComponentOperatorPatternAction(yytext, yyleng); }
 
-{component}+                                { return ComponentOperatorPatternAction(yytext, yyleng); }
+{component}                                 { return ComponentOperatorPatternAction(yytext, yyleng); }
 
 {digit}+									{ return IntegerPatternAction(yytext, yyleng); }
 
-{whitespace}*								{ IgnoredPatternAction(yytext, yyleng); }
-
 {string}                                    { return StringPatternAction(yytext, yyleng); }                                    
+
+{whitespace}*								{ IgnoredPatternAction(yytext, yyleng); }
 
 {identifier}+                               { return IdentifierPatterAction(yytext, yyleng); }
 
