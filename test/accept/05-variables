@@ -1,0 +1,4 @@
+bateria = battery({4, "volt"}, "hola")
+start mesh
+bateria
+end mesh

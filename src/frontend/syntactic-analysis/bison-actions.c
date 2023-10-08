@@ -109,3 +109,38 @@ int IdentifierConstantGrammarAction(const int value) {
 	LogDebug("[Bison] IdentifierConstantGrammarAction(%d)", value);
 	return value;
 }
+
+int FunctionParamsGrammarAction(const int value) {
+	LogDebug("[Bison] FunctionParamsGrammarAction(%d)", value);
+	return value;
+}
+
+int MeshGrammarAction(const int value) {
+	LogDebug("[Bison] MeshGrammarAction(%d)", value);
+	return value;
+}
+
+int ComponentsGrammarAction(const int value) {
+	LogDebug("[Bison] ComponentsGrammarAction(%d)", value);
+	return value;
+}
+
+int PairsGrammarAction(const int value) {
+	LogDebug("[Bison] PairsGrammarAction(%d)", value);
+	return value;
+}
+
+int VariablesGrammarAction(const int value) {
+	LogDebug("[Bison] VariablesGrammarAction(%d)", value);
+	return value;
+}
+
+int IdentifierVariableGrammarAction(const int value) {
+	LogDebug("[Bison] IdentifierVariableGrammarAction(%d)", value);
+	return value;
+}
+
+int FunctionsGrammarAction(const int value) {
+	LogDebug("[Bison] FunctionsGrammarAction(%d)", value);
+	return value;
+}

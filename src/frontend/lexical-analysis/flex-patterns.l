@@ -55,7 +55,7 @@ parallel                                    { return FunctionPatternAction(yytex
 
 {component}                                 { return ComponentOperatorPatternAction(yytext, yyleng); }
 
-{endline}+?                                 { IgnoredPatternAction(yytext, yyleng); return EndLinePatternAction(); }
+{endline}+?                                  { return EndLinePatternAction(); }
 
 {digit}+									{ return IntegerPatternAction(yytext, yyleng); }
 

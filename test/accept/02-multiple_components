@@ -1,8 +1,4 @@
-Resistance
-Battery
-Cable
-Inductor
-Ammeter
+
 start mesh
     Voltmeter
     Switch
@@ -20,3 +16,4 @@ start mesh
     Led(4)
     Trasformer(4)
 end mesh
+

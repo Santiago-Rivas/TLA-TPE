@@ -34,4 +34,18 @@ int PairGrammarAction(const int value1, const char* value2);
 int IntegerConstantGrammarAction(const int value);
 int IdentifierConstantGrammarAction(const int value);
 
+int FunctionParamsGrammarAction(const int value); 
+
+int MeshGrammarAction(const int value); 
+
+int ComponentsGrammarAction(const int value); 
+
+int PairsGrammarAction(const int value); 
+
+int VariablesGrammarAction(const int value);
+
+int IdentifierVariableGrammarAction(const int value);
+    
+int FunctionsGrammarAction(const int value);
+
 #endif
