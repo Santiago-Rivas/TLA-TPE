@@ -20,8 +20,8 @@
 digit			[0-9]
 identifier      [A-Za-z]|[A-Za-z][A-Za-z0-9]
 string          \"[^\"]*\"
-endline			[\n]
-whitespace		[ \f\n\r\t\v]
+endline			\n
+whitespace		[ \f\r\t\v]+
 component       resistance|battery|cable|inductor|ammeter|voltmeter|switch|capacitor|led|trasformer
 colors          red|green|blue
 
@@ -43,15 +43,17 @@ colors          red|green|blue
 
 ","                                         { return CommaPatternaction(yytext); }
 
-"start"                                     { IgnoredPatternAction(yytext, yyleng); return StartPatternAction(yytext, yyleng); }
-"mesh"                                      { IgnoredPatternAction(yytext, yyleng); return MeshPatternAction(yytext, yyleng); }
-"end"                                       { IgnoredPatternAction(yytext, yyleng); return EndPatternAction(yytext, yyleng); }
+start                                      { return StartPatternAction(yytext, yyleng); }
+mesh                                      { return MeshPatternAction(yytext, yyleng); }
+end                                       { return EndPatternAction(yytext, yyleng); }
 
 "="                                         { return AssignOperatorPatternAction(yytext); }
 
 {colors}                                    { return ColorComponentOperatorPatternAction(yytext, yyleng); }
 
 {component}                                 { return ComponentOperatorPatternAction(yytext, yyleng); }
+
+{endline}+?                                  { IgnoredPatternAction(yytext, yyleng); return EndLinePatternAction(); }
 
 {digit}+									{ return IntegerPatternAction(yytext, yyleng); }
 

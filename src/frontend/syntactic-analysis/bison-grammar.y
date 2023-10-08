@@ -78,20 +78,21 @@
 
 %%
 
-program: BEGGIN MESH END MESH											 			{ $$ = ProgramGrammarAction($1); }
-	| BEGGIN MESH component END MESH												{ $$ = ProgramGrammarAction($3); }
-	| component BEGGIN MESH component END MESH										{ $$ = ProgramGrammarAction($4); }
-	| component BEGGIN MESH END MESH												{ $$ = ProgramGrammarAction($1); }
+program: program BEGGIN MESH NEWLINE END MESH											 				{ $$ = ProgramGrammarAction($1); }
+	| program BEGGIN MESH NEWLINE component END MESH												{ $$ = ProgramGrammarAction($3); }
+	| component BEGGIN MESH NEWLINE component END MESH										{ $$ = ProgramGrammarAction($4); }
+	| component BEGGIN MESH NEWLINE END MESH												{ $$ = ProgramGrammarAction($1); }
+	| program NEWLINE
 	;
 
-component: COMPONENT params component  												{ $$ = ComponentGrammarAction($1); } 
-	| COMPONENT component  															{ $$ = ComponentGrammarAction($1); }
-	| COMPONENT params																{ $$ = ComponentGrammarAction($1); }
-	| COMPONENT 																	{ $$ = ComponentGrammarAction($1); }
-	| COLOR COMPONENT params component 												{ $$ = ComponentGrammarAction($2); } 
-	| COLOR COMPONENT component 													{ $$ = ComponentGrammarAction($2); }
-	| COLOR COMPONENT params  														{ $$ = ComponentGrammarAction($2); }
-	| COLOR COMPONENT   															{ $$ = ComponentGrammarAction($2); }
+component: COMPONENT params NEWLINE component  												{ $$ = ComponentGrammarAction($1); } 
+	| COMPONENT NEWLINE component  															{ $$ = ComponentGrammarAction($1); }
+	| COMPONENT params NEWLINE																{ $$ = ComponentGrammarAction($1); }
+	| COMPONENT NEWLINE 																	{ $$ = ComponentGrammarAction($1); }
+	| COLOR COMPONENT params NEWLINE component 												{ $$ = ComponentGrammarAction($2); } 
+	| COLOR COMPONENT NEWLINE component 													{ $$ = ComponentGrammarAction($2); }
+	| COLOR COMPONENT params NEWLINE  														{ $$ = ComponentGrammarAction($2); }
+	| COLOR COMPONENT NEWLINE   															{ $$ = ComponentGrammarAction($2); }
 	;
 
 params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS									{ $$ = ExpressionParamsGrammarAction($2); }
