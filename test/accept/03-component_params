@@ -1,6 +1,6 @@
-resistance({4, "volt"})
-battery({4, "volt"}, "hola")
+Resistance({4, "volt"})
+Battery({4, "volt"}, "hola")
 start mesh
-resistance({4, "V"})
-battery({4, "A"}, "mA")
+Resistance({4, "V"})
+Battery({4, "A"}, "mA")
 end mesh

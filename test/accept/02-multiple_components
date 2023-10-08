@@ -1,22 +1,22 @@
-resistance
-battery
-cable
-inductor
-ammeter
+Resistance
+Battery
+Cable
+Inductor
+Ammeter
 start mesh
-voltmeter
-switch
-capacitor
-led
-trasformer
-resistance(4)
-battery(4)
-cable(4)
-inductor(4)
-ammeter(4)
-voltmeter(4)
-switch(4)
-capacitor(4)
-led(4)
-trasformer(4)
+    Voltmeter
+    Switch
+    Capacitor
+    Led
+    Trasformer
+    Resistance(4)
+    Battery(4)
+    Cable(4)
+    Inductor(4)
+    Ammeter(4)
+    Voltmeter(4)
+    Switch(4)
+    Capacitor(4)
+    Led(4)
+    Trasformer(4)
 end mesh

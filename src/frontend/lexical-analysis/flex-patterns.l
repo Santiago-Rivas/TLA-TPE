@@ -22,7 +22,7 @@ identifier      [A-Za-z]|[A-Za-z][A-Za-z0-9]
 string          \"[^\"]*\"
 endline			\n
 whitespace		[ \f\r\t\v]+
-component       resistance|battery|cable|inductor|ammeter|voltmeter|switch|capacitor|led|trasformer
+component       Resistance|Battery|Cable|Inductor|Ammeter|Voltmeter|Switch|Capacitor|Led|Trasformer
 colors          red|green|blue
 
 %%
