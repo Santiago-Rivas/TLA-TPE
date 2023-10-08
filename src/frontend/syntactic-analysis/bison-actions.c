@@ -50,6 +50,12 @@ int ProgramGrammarAction(const int value) {
 	return value;
 }
 
+// Function
+int FunctionGrammarAction(const int value) {
+	LogDebug("[Bison] FunctionGrammarAction(%d)", value);
+	return value;
+}
+
 // Component
 
 int AssignGrammarAction(const int value, const int rValue) {

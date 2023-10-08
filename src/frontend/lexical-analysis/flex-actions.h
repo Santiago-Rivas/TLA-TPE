@@ -38,6 +38,7 @@ token IdentifierPatterAction(const char * lexeme, const int length);
 token StartPatternAction(const char * lexeme, const int length);
 token MeshPatternAction(const char * lexeme, const int length);
 token EndPatternAction(const char * lexeme, const int length);
+token FunctionPatternAction(const char * lexeme, const int length);
 token EndLinePatternAction();
 token StringPatternAction(const char * lexeme, const int length);
 token ColorComponentOperatorPatternAction(const char* lexeme, const int length);

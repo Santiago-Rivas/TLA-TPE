@@ -43,9 +43,11 @@ colors          red|green|blue
 
 ","                                         { return CommaPatternaction(yytext); }
 
-start                                      { return StartPatternAction(yytext, yyleng); }
-mesh                                      { return MeshPatternAction(yytext, yyleng); }
-end                                       { return EndPatternAction(yytext, yyleng); }
+start                                       { return StartPatternAction(yytext, yyleng); }
+mesh                                        { return MeshPatternAction(yytext, yyleng); }
+end                                         { return EndPatternAction(yytext, yyleng); }
+
+parallel                                    { return FunctionPatternAction(yytext, yyleng); }
 
 "="                                         { return AssignOperatorPatternAction(yytext); }
 
@@ -53,7 +55,7 @@ end                                       { return EndPatternAction(yytext, yyle
 
 {component}                                 { return ComponentOperatorPatternAction(yytext, yyleng); }
 
-{endline}+?                                  { IgnoredPatternAction(yytext, yyleng); return EndLinePatternAction(); }
+{endline}+?                                 { IgnoredPatternAction(yytext, yyleng); return EndLinePatternAction(); }
 
 {digit}+									{ return IntegerPatternAction(yytext, yyleng); }
 

@@ -134,6 +134,16 @@ token EndLinePatternAction() {
 	return NEWLINE;
 }
 
+token FunctionPatternAction(const char * lexeme, const int length) {
+	char* lexemeCopy = copyLexeme(lexeme, length);
+	LogDebug("[Flex] FunctionPatternAction: '%s'.", lexemeCopy);
+	free(lexemeCopy);
+	yylval.function = FUNCTION;
+	return FUNCTION;
+
+}
+
+
 token StringPatternAction(const char * lexeme, const int length) {
 	char* lexemeCopy = copyLexeme(lexeme, length);
 	LogDebug("[Flex] StringPatternAction: '%s'.", lexemeCopy);

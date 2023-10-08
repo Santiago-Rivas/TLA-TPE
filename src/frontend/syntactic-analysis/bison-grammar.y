@@ -18,15 +18,16 @@
 	// No-terminales (frontend).
 	int program;
 	int constant;
-	char * identifier;
-	int params;
 	int component;
+	int params;
+	int color;
 	int pair;
 	int beggin;
-	int mesh;
 	int end;
+	int mesh;
+	int function;
 	char * string;
-	int color;
+	char * identifier;
 
 	// Terminales.
 	token token;
@@ -50,6 +51,7 @@
 
 %token <token> OPEN_BRACKET
 %token <token> CLOSE_BRACKET
+%token <token> FUNCTION
 
 %token <token> OPEN_SQUAREDBRACKET
 %token <token> CLOSE_SQUAREDBRACKET
@@ -68,6 +70,7 @@
 %type <params> params
 %type <component> component
 %type <pair> pair
+%type <function> function
 
 // Reglas de asociatividad y precedencia (de menor a mayor).
 // %left ADD SUB
@@ -78,11 +81,19 @@
 
 %%
 
-program: program BEGGIN MESH NEWLINE END MESH											 				{ $$ = ProgramGrammarAction($1); }
-	| program BEGGIN MESH NEWLINE component END MESH												{ $$ = ProgramGrammarAction($3); }
+program: program BEGGIN MESH NEWLINE END MESH											 	{ $$ = ProgramGrammarAction($1); }
+	| program BEGGIN MESH NEWLINE component END MESH										{ $$ = ProgramGrammarAction($3); }
 	| component BEGGIN MESH NEWLINE component END MESH										{ $$ = ProgramGrammarAction($4); }
 	| component BEGGIN MESH NEWLINE END MESH												{ $$ = ProgramGrammarAction($1); }
+	| BEGGIN MESH function NEWLINE END MESH													{ $$ = ProgramGrammarAction($1); }
+	| BEGGIN MESH component function NEWLINE END MESH										{ $$ = ProgramGrammarAction($1); }
+	| component BEGGIN MESH NEWLINE function NEWLINE END MESH								{ $$ = ProgramGrammarAction($1); }
+	| component BEGGIN MESH NEWLINE component function NEWLINE END MESH 					{ $$ = ProgramGrammarAction($1); }
+	| component BEGGIN MESH NEWLINE component function component END MESH					{ $$ = ProgramGrammarAction($1); }
 	| program NEWLINE
+	;
+
+function: FUNCTION OPEN_PARENTHESIS NEWLINE OPEN_SQUAREDBRACKET NEWLINE component CLOSE_SQUAREDBRACKET COMMA NEWLINE OPEN_SQUAREDBRACKET NEWLINE component CLOSE_SQUAREDBRACKET NEWLINE CLOSE_PARENTHESIS  { $$ = FunctionGrammarAction($1); }
 	;
 
 component: COMPONENT params NEWLINE component  												{ $$ = ComponentGrammarAction($1); } 

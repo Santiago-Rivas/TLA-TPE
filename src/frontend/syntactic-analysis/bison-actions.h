@@ -14,6 +14,9 @@
 // Programa.
 int ProgramGrammarAction(const int value);
 
+//Function
+int FunctionGrammarAction(const int value);
+
 // Component.
 int AssignGrammarAction(const int value, const int rValue);
 int ComponentGrammarAction(const int value);
