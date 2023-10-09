@@ -1,3 +1,19 @@
 start mesh
-FrancoPani
+    parallel(
+        [
+            Transistor
+            Led
+            led
+        ],
+        [
+            batte
+        ],
+        [
+            hello
+        ],
+
+        [
+            hello
+        ]
+    )
 end mesh

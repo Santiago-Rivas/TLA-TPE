@@ -17,20 +17,20 @@
 %x COMMENT
 
 /* Patrones reutilizables. */
-digit			[0-9]
+digit           [0-9]
 identifier      [A-Za-z]|[A-Za-z][A-Za-z0-9_-]*[A-Za-z0-9]*
 string          \"[^\"]*\"
-endline			\n
-whitespace		[ \f\r\t\v]+
+endline         \n
+whitespace      [ \f\r\t\v]+
 component       Resistor|Battery|Cable|Inductor|Ammeter|Voltmeter|Switch|Capacitor|Led|Transistor
 colors          red|green|blue
 
 %%
 
-"/*"										{ BEGIN(COMMENT); BeginCommentPatternAction(); }
-<COMMENT>.									{ IgnoredPatternAction(yytext, yyleng); }
-<COMMENT>{endline}+							{ IgnoredPatternAction(yytext, yyleng); }
-<COMMENT>"*/"								{ EndCommentPatternAction(); BEGIN(INITIAL); }
+"/*"                                        { BEGIN(COMMENT); BeginCommentPatternAction(); }
+<COMMENT>.                                  { IgnoredPatternAction(yytext, yyleng); }
+<COMMENT>{endline}+                         { IgnoredPatternAction(yytext, yyleng); }
+<COMMENT>"*/"                               { EndCommentPatternAction(); BEGIN(INITIAL); }
 
 "("                                         { return OpenParenthesisPatternAction(yytext); }
 ")"                                         { return CloseParenthesisPatternAction(yytext); }
@@ -55,16 +55,16 @@ parallel                                    { return FunctionPatternAction(yytex
 
 {component}                                 { return ComponentOperatorPatternAction(yytext, yyleng); }
 
-{endline}+?                                  { return EndLinePatternAction(); }
+{endline}+                                  { return EndLinePatternAction(); }
 
-{digit}+									{ return IntegerPatternAction(yytext, yyleng); }
+{digit}+                                    { return IntegerPatternAction(yytext, yyleng); }
 
-{string}                                    { return StringPatternAction(yytext, yyleng); }                                    
+{string}                                    { return StringPatternAction(yytext, yyleng); }
 
-{whitespace}*								{ IgnoredPatternAction(yytext, yyleng); }
+{whitespace}*                               { IgnoredPatternAction(yytext, yyleng); }
 
 {identifier}+                               { return IdentifierPatterAction(yytext, yyleng); }
 
-.											{ return UnknownPatternAction(yytext, yyleng); }
+.                                           { return UnknownPatternAction(yytext, yyleng); }
 
 %%

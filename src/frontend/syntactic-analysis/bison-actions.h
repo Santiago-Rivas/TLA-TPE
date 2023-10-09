@@ -36,6 +36,7 @@ int IntegerConstantGrammarAction(const int value);
 int IdentifierConstantGrammarAction(const int value);
 
 int FunctionParamsGrammarAction(const int value); 
+int FunctionParamGrammarAction(const int value); 
 
 int MeshGrammarAction(const int value); 
 

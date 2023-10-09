@@ -120,6 +120,11 @@ int FunctionParamsGrammarAction(const int value) {
 	return value;
 }
 
+int FunctionParamGrammarAction(const int value) {
+	LogDebug("[Bison] FunctionParamGrammarAction(%d)", value);
+	return value;
+}
+
 int MeshGrammarAction(const int value) {
 	LogDebug("[Bison] MeshGrammarAction(%d)", value);
 	return value;
