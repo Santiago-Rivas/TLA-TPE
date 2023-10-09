@@ -1,0 +1,3 @@
+start mesh
+    Resistor({"X", "Ohm"})
+end mesh

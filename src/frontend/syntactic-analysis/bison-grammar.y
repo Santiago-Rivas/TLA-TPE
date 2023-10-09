@@ -27,6 +27,7 @@
 	int beggin;
 	int end;
 	int mesh;
+	int meshes;
 	int function;
 	int functions;
 	int function_params;
@@ -76,15 +77,16 @@
 %type <constant> constant
 %type <params> params
 %type <component> component
-%type <components> components
+//%type <components> components
 %type <pair> pair
 %type <pairs> pairs
 %type <function> function
-%type <functions> functions
+//%type <functions> functions
 %type <function_params> function_params
 %type <variable> variable
 %type <variables> variables
 %type <mesh> mesh
+%type <meshes> meshes
 
 // Reglas de asociatividad y precedencia (de menor a mayor).
 // %left ADD SUB
@@ -95,31 +97,34 @@
 
 %%
 
-program: BEGGIN MESH NEWLINE mesh END MESH								        			 	{ $$ = ProgramGrammarAction($1); }
-	| variables BEGGIN MESH NEWLINE mesh END MESH										{ $$ = ProgramGrammarAction($1); }
+program: BEGGIN MESH NEWLINE meshes END MESH								        			 	{ $$ = ProgramGrammarAction($1); }
+	| variables BEGGIN MESH NEWLINE meshes END MESH										{ $$ = ProgramGrammarAction($1); }
 	| program NEWLINE 													                { $$ = ProgramGrammarAction($1); }
-	| NEWLINE BEGGIN MESH NEWLINE mesh END MESH												            { $$ = ProgramGrammarAction($1); }
+	| NEWLINE BEGGIN MESH NEWLINE meshes END MESH												            { $$ = ProgramGrammarAction($1); }
 	;
 
 function: FUNCTION OPEN_PARENTHESIS NEWLINE  function_params  CLOSE_PARENTHESIS  { $$ = FunctionGrammarAction($1); }
 	;
 
-functions: function NEWLINE																{ $$ = FunctionsGrammarAction($1); }
+/* functions: function NEWLINE																{ $$ = FunctionsGrammarAction($1); }
 	| function NEWLINE functions														{ $$ = FunctionsGrammarAction($1); }
+	; */
+
+
+function_params:OPEN_SQUAREDBRACKET NEWLINE meshes CLOSE_SQUAREDBRACKET COMMA NEWLINE	function_params			   { $$ = FunctionParamsGrammarAction($1); }
+	| OPEN_SQUAREDBRACKET NEWLINE meshes CLOSE_SQUAREDBRACKET NEWLINE				   { $$ = FunctionParamsGrammarAction($1); }
+	| meshes COMMA NEWLINE function_params											   { $$ = FunctionParamsGrammarAction($1); }
 	;
 
 
-function_params:OPEN_SQUAREDBRACKET NEWLINE mesh CLOSE_SQUAREDBRACKET COMMA NEWLINE	function_params			   { $$ = FunctionParamsGrammarAction($1); }
-	| OPEN_SQUAREDBRACKET NEWLINE mesh CLOSE_SQUAREDBRACKET NEWLINE				   { $$ = FunctionParamsGrammarAction($1); }
-	| mesh COMMA NEWLINE function_params											   { $$ = FunctionParamsGrammarAction($1); }
+
+mesh: component 														                    { $$ = MeshGrammarAction($1); }
+	| function														                        { $$ = MeshGrammarAction($1); }
+	| IDENTIFIER                                                                       { $$ = MeshGrammarAction($1); }
 	;
 
-
-
-mesh: mesh NEWLINE 																	{ $$ = MeshGrammarAction($1); }
-	| components 														                    { $$ = MeshGrammarAction($1); }
-	| functions 														                        { $$ = MeshGrammarAction($1); }
-	| IDENTIFIER NEWLINE                                                                       { $$ = MeshGrammarAction($1); }
+meshes: mesh NEWLINE 																	{ $$ = MeshesGrammarAction($1); }
+	| mesh NEWLINE meshes																{ $$ = MeshesGrammarAction($1); }
 	;
 
 component: COMPONENT params 																 { $$ = ComponentGrammarAction($1); }
@@ -128,9 +133,9 @@ component: COMPONENT params 																 { $$ = ComponentGrammarAction($1); 
 	| COLOR COMPONENT params   														    { $$ = ComponentGrammarAction($2); }
 	;
 
-components: component NEWLINE																{ $$ = ComponentsGrammarAction($1); }
+/* components: component NEWLINE																{ $$ = ComponentsGrammarAction($1); }
 	| component NEWLINE components															{ $$ = ComponentsGrammarAction($1); }
-	;
+	; */
 
 
 params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS									{ $$ = ExpressionParamsGrammarAction($2); }
@@ -141,8 +146,8 @@ pairs: pair 																		{ $$ = PairsGrammarAction($1); }
 	| pair COMMA pairs																{ $$ = PairsGrammarAction($1); }
 	;
 
-pair: OPEN_BRACKET INTEGER COMMA STRING CLOSE_BRACKET								{ $$ = PairGrammarAction($2, $4); }
-	//| OPEN_BRACKET STRING COMMA STRING CLOSE_BRACKET								{ $$ = PairGrammarAction($2, $4); }
+pair: OPEN_BRACKET INTEGER COMMA STRING CLOSE_BRACKET								{ $$ = PairIntegerGrammarAction($2, $4); }
+	| OPEN_BRACKET STRING COMMA STRING CLOSE_BRACKET								{ $$ = PairStringGrammarAction($2, $4); }
 	;
 
 constant: INTEGER 																	{ $$ = IntegerConstantGrammarAction($1); }

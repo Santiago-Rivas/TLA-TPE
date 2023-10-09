@@ -1,0 +1,34 @@
+start mesh
+    parallel (
+	    [
+            Battery
+            Led
+            Capacitor
+	    ],
+	    [
+            Resistor
+        ]
+    )
+    Battery
+    Capacitor
+    Led
+    parallel (
+	    [
+            Battery
+            Led
+            Capacitor
+	    ],
+	    [
+        parallel (
+            [
+                Battery
+                Led
+                Capacitor
+            ],
+            [
+                Resistor
+            ]
+        )
+	    ]
+    )
+end mesh

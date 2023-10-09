@@ -4,7 +4,11 @@ start mesh
             Capacitor
 	    ],
 	    [
-            Resistance
+            Resistor
+	    ],
+	    [
+            Led
+            Battery
 	    ]
     )
 end mesh

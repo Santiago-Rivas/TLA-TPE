@@ -1,0 +1,10 @@
+start mesh
+    parallel (
+	    [
+            Capacitor
+	    ],
+	    [
+	    ]
+    )
+end mesh
+

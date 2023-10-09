@@ -93,9 +93,14 @@ int FullSizeParamsGrammarAction(const int value1, const char* value2) {
 
 // Pair
 
-int PairGrammarAction(const int value1, const char* value2) {
+int PairIntegerGrammarAction(const int value1, const char* value2) {
 	LogDebug("[Bison] PairFactorGrammarAction({%d, %p})", value1, value2);
 	return value1;
+}
+
+int PairStringGrammarAction(const char* value1, const char* value2) {
+	LogDebug("[Bison] PairFactorGrammarAction({%d, %p})", value1, value2);
+	return 0;
 }
 
 // Constantes
@@ -117,6 +122,11 @@ int FunctionParamsGrammarAction(const int value) {
 
 int MeshGrammarAction(const int value) {
 	LogDebug("[Bison] MeshGrammarAction(%d)", value);
+	return value;
+}
+
+int MeshesGrammarAction(const int value) {
+	LogDebug("[Bison] MeshesGrammarAction(%d)", value);
 	return value;
 }
 

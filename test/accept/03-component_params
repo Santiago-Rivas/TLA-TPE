@@ -1,5 +1,0 @@
-
-start mesh
-Resistance({4, "volt"})
-Battery({4, "volt"}, {4, "volt"}, {1, "volt"})
-end mesh

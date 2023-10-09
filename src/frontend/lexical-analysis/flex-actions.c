@@ -33,8 +33,8 @@ void EndCommentPatternAction() {
 	LogDebug("[Flex] [COMMENT] EndCommentPatternAction..............................");
 }
 
-token ComponentOperatorPatternAction(const char* lexeme, const int lenght) {
-	char* lexemeCopy = copyLexeme(lexeme, lenght);
+token ComponentOperatorPatternAction(const char* lexeme, const int length) {
+	char* lexemeCopy = copyLexeme(lexeme, length);
 	LogDebug("[Flex] ComponentOperatorPatternAction: %s", lexemeCopy);
 	free(lexemeCopy);
 	yylval.component = COMPONENT;
@@ -99,7 +99,7 @@ token AssignOperatorPatternAction() {
 
 token IdentifierPatterAction(const char * lexeme, const int length) {
 	char* lexemeCopy = copyLexeme(lexeme, length);
-	LogDebug("[Flex] IdentifierPatternAction: '%s' (lenght = %d).", lexemeCopy, length);
+	LogDebug("[Flex] IdentifierPatternAction: '%s' (length = %d).", lexemeCopy, length);
 	free(lexemeCopy);
 	yylval.identifier = (char*) IDENTIFIER;
 	return IDENTIFIER;

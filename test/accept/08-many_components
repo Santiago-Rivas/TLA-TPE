@@ -1,0 +1,11 @@
+start mesh
+    Battery
+    Led
+    Resistor
+    Voltmeter
+    Ammeter
+    Capacitor
+    Inductor
+    Cable
+end mesh
+
