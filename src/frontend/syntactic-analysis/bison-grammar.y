@@ -109,7 +109,8 @@ functions: function NEWLINE																{ $$ = FunctionsGrammarAction($1); }
 	;
 
 
-function_params:OPEN_SQUAREDBRACKET mesh  NEWLINE CLOSE_SQUAREDBRACKET 				   { $$ = FunctionParamsGrammarAction($1); }
+function_params:OPEN_SQUAREDBRACKET NEWLINE mesh CLOSE_SQUAREDBRACKET COMMA NEWLINE	function_params			   { $$ = FunctionParamsGrammarAction($1); }
+	| OPEN_SQUAREDBRACKET NEWLINE mesh CLOSE_SQUAREDBRACKET NEWLINE				   { $$ = FunctionParamsGrammarAction($1); }
 	| mesh COMMA NEWLINE function_params											   { $$ = FunctionParamsGrammarAction($1); }
 	;
 

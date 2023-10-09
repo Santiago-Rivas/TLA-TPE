@@ -66,7 +66,7 @@ token OpenSquareBracketsPatternAction() {
 }
 
 token CloseSquareBracketsPatternAction() {
-	LogDebug("[Flex] OpenSquareBracketsPatternAction: ']'.");
+	LogDebug("[Flex] CloseSquareBracketsPatternAction: ']'.");
 	yylval.token = CLOSE_SQUAREDBRACKET;
 	return CLOSE_SQUAREDBRACKET;
 }

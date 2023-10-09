@@ -1,19 +1,11 @@
-
 start mesh
-    Voltmeter
-    Switch
-    Capacitor
-    Led
-    Trasformer
-    Resistance(4)
-    Battery(4)
-    Cable(4)
-    Inductor(4)
-    Ammeter(4)
-    Voltmeter(4)
-    Switch(4)
-    Capacitor(4)
-    Led(4)
-    Trasformer(4)
+    parallel (
+	    [
+            Capacitor
+	    ],
+	    [
+            Resistance
+	    ]
+    )
 end mesh
 
