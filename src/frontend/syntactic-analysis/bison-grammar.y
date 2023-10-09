@@ -19,7 +19,6 @@
 	int program;
 	int constant;
 	int component;
-	int components;
 	int params;
 	int color;
 	int pair;
@@ -29,7 +28,6 @@
 	int mesh;
 	int meshes;
 	int function;
-	int functions;
 	int function_params;
 	char * string;
 	char * identifier;
@@ -77,11 +75,9 @@
 %type <constant> constant
 %type <params> params
 %type <component> component
-//%type <components> components
 %type <pair> pair
 %type <pairs> pairs
 %type <function> function
-//%type <functions> functions
 %type <function_params> function_params
 %type <variable> variable
 %type <variables> variables
@@ -106,11 +102,6 @@ program: BEGGIN MESH NEWLINE meshes END MESH								        			 	{ $$ = ProgramG
 function: FUNCTION OPEN_PARENTHESIS NEWLINE  function_params  CLOSE_PARENTHESIS  { $$ = FunctionGrammarAction($1); }
 	;
 
-/* functions: function NEWLINE																{ $$ = FunctionsGrammarAction($1); }
-	| function NEWLINE functions														{ $$ = FunctionsGrammarAction($1); }
-	; */
-
-
 function_params:OPEN_SQUAREDBRACKET NEWLINE meshes CLOSE_SQUAREDBRACKET COMMA NEWLINE	function_params			   { $$ = FunctionParamsGrammarAction($1); }
 	| OPEN_SQUAREDBRACKET NEWLINE meshes CLOSE_SQUAREDBRACKET NEWLINE				   { $$ = FunctionParamsGrammarAction($1); }
 	| meshes COMMA NEWLINE function_params											   { $$ = FunctionParamsGrammarAction($1); }
@@ -133,11 +124,6 @@ component: COMPONENT params 																 { $$ = ComponentGrammarAction($1); 
 	| COLOR COMPONENT 													                { $$ = ComponentGrammarAction($2); }
 	| COLOR COMPONENT params   														    { $$ = ComponentGrammarAction($2); }
 	;
-
-/* components: component NEWLINE																{ $$ = ComponentsGrammarAction($1); }
-	| component NEWLINE components															{ $$ = ComponentsGrammarAction($1); }
-	; */
-
 
 params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS									{ $$ = ExpressionParamsGrammarAction($2); }
 	| 	OPEN_PARENTHESIS pairs CLOSE_PARENTHESIS										{ $$ = PairParamsGrammarAction($2); }
