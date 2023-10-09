@@ -1,0 +1,16 @@
+my_bat = Battery({1,"eV"})
+my_vm = Voltmeter(4)
+my_am = Ammeter(2)
+my_res = Resistor(0.003)
+start mesh
+    my_bat
+    my_am
+    parallel(
+    [
+        my_vm
+    ],
+    [
+        my_res
+    ]
+    )
+end mesh

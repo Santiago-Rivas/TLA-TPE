@@ -30,9 +30,11 @@ int FullSizeParamsGrammarAction(const int value1, const char* value2);
 // Pair
 int PairIntegerGrammarAction(const int value1, const char* value2);
 int PairStringGrammarAction(const char* value1, const char* value2);
+int PairRealGrammarAction(const float value1, const char* value2);
 
 // Constantes.
 int IntegerConstantGrammarAction(const int value);
+int RealNumberConstantGrammarAction(const float value);
 int IdentifierConstantGrammarAction(const int value);
 
 int FunctionParamsGrammarAction(const int value); 

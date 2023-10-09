@@ -59,6 +59,8 @@ parallel                                    { return FunctionPatternAction(yytex
 
 {digit}+                                    { return IntegerPatternAction(yytext, yyleng); }
 
+{digit}.{digit}+                            { return RealNumberPatternAction(yytext, yyleng); }
+
 {string}                                    { return StringPatternAction(yytext, yyleng); }
 
 {whitespace}*                               { IgnoredPatternAction(yytext, yyleng); }

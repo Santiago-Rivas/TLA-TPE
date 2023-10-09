@@ -1,0 +1,4 @@
+bat = Battery({2})
+start mesh
+    bat
+end mesh

@@ -33,6 +33,7 @@ token CloseSquareBracketsPatternAction();
 token OpenParenthesisPatternAction();
 token CloseParenthesisPatternAction();
 token IntegerPatternAction(const char * lexeme, const int length);
+token RealNumberPatternAction(const char * lexeme, const int length);
 token AssignOperatorPatternAction();
 token IdentifierPatterAction(const char * lexeme, const int length);
 token StartPatternAction(const char * lexeme, const int length);

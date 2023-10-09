@@ -39,6 +39,7 @@
 	// Terminales.
 	token token;
 	int integer;
+	float real;
 	int newLine;
 
 }
@@ -64,6 +65,7 @@
 %token <token> CLOSE_SQUAREDBRACKET
 
 %token <integer> INTEGER
+%token <real> REAL 
 %token <token> IDENTIFIER // token??? (identifier type char*)
 %token <mesh> MESH
 %token <beggin> BEGGIN
@@ -136,9 +138,11 @@ pairs: pair                                                                     
 
 pair: OPEN_BRACKET INTEGER COMMA STRING CLOSE_BRACKET                                           { $$ = PairIntegerGrammarAction($2, $4); }
     | OPEN_BRACKET STRING COMMA STRING CLOSE_BRACKET                                            { $$ = PairStringGrammarAction($2, $4); }
+    | OPEN_BRACKET REAL COMMA STRING CLOSE_BRACKET                                              { $$ = PairRealGrammarAction($2, $4); }
     ;
 
 constant: INTEGER                                                                               { $$ = IntegerConstantGrammarAction($1); }
+    | REAL                                                                                      { $$ = RealNumberConstantGrammarAction($1); }
     ;
 
 variables: variable NEWLINE                                                                     { $$ = VariablesGrammarAction($1); }

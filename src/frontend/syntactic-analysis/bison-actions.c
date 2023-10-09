@@ -103,11 +103,21 @@ int PairStringGrammarAction(const char* value1, const char* value2) {
 	return 0;
 }
 
+int PairRealGrammarAction(const float value1, const char* value2) {
+	LogDebug("[Bison] PairRealGrammarAction({%d, %p})", value1, value2);
+	return 0;
+}
+
 // Constantes
 
 int IntegerConstantGrammarAction(const int value) {
 	LogDebug("[Bison] IntegerConstantGrammarAction(%d)", value);
 	return value;
+}
+
+int RealNumberConstantGrammarAction(const float value) {
+	LogDebug("[Bison] RealNumberConstantGrammarAction(%d)", value);
+	return 0;
 }
 
 int IdentifierConstantGrammarAction(const int value) {

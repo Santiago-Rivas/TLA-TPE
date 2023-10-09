@@ -91,6 +91,14 @@ token IntegerPatternAction(const char * lexeme, const int length) {
 	return INTEGER;
 }
 
+token RealNumberPatternAction(const char * lexeme, const int length) {
+	char * lexemeCopy = copyLexeme(lexeme, length);
+	LogDebug("[Flex] RealNumberPatternAction: '%s' (length = %d).", lexemeCopy, length);
+	free(lexemeCopy);
+	yylval.real = REAL;
+	return REAL;
+}
+
 token AssignOperatorPatternAction() {
 	LogDebug("[Flex] AssignOpperatorPatternAction: '='.");
 	yylval.constant = ASSIGN;

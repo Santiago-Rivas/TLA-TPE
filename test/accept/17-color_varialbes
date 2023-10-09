@@ -1,0 +1,6 @@
+bat = red Battery(1)
+led = Led
+start mesh
+    bat
+    green led
+end mesh
