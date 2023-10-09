@@ -120,7 +120,8 @@ function_params:OPEN_SQUAREDBRACKET NEWLINE meshes CLOSE_SQUAREDBRACKET COMMA NE
 
 mesh: component 														                    { $$ = MeshGrammarAction($1); }
 	| function														                        { $$ = MeshGrammarAction($1); }
-	| IDENTIFIER                                                                       { $$ = MeshGrammarAction($1); }
+	| IDENTIFIER                                                                     { $$ = MeshGrammarAction($1); }
+	| COLOR IDENTIFIER                                                                     { $$ = MeshGrammarAction($1); }
 	;
 
 meshes: mesh NEWLINE 																	{ $$ = MeshesGrammarAction($1); }
@@ -151,7 +152,6 @@ pair: OPEN_BRACKET INTEGER COMMA STRING CLOSE_BRACKET								{ $$ = PairIntegerG
 	;
 
 constant: INTEGER 																	{ $$ = IntegerConstantGrammarAction($1); }
-	| IDENTIFIER																	{ $$ = IdentifierConstantGrammarAction($1); }
 	;
 
 variables: variable NEWLINE																{ $$ = VariablesGrammarAction($1); }

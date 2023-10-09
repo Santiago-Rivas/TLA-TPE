@@ -1,0 +1,15 @@
+my_light = Led
+battery1 = Battery({2, "V"})
+start mesh
+    battery1
+    parallel(
+        [
+            Ammeter({2, "mA"})
+            my_light
+            red battery1
+        ],
+        [
+            Resistor
+        ]
+    )
+end mesh

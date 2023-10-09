@@ -19,16 +19,18 @@ start mesh
             Capacitor
 	    ],
 	    [
-        parallel (
-            [
-                Battery
-                Led
-                Capacitor
-            ],
-            [
-                Resistor
-            ]
-        )
+            Capacitor
+            Led
+            parallel (
+                [
+                    Battery
+                    Led
+                    Capacitor
+                ],
+                [
+                    Resistor
+                ]
+            )
 	    ]
     )
 end mesh

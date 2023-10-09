@@ -18,7 +18,7 @@
 
 /* Patrones reutilizables. */
 digit			[0-9]
-identifier      [A-Za-z]|[A-Za-z][A-Za-z0-9]
+identifier      [A-Za-z]|[A-Za-z][A-Za-z0-9_-]*[A-Za-z0-9]*
 string          \"[^\"]*\"
 endline			\n
 whitespace		[ \f\r\t\v]+
