@@ -1,5 +1,0 @@
-start mesh
-red Resistor({4, "volt"})
-green Resistor({4, "V"})
-blue Battery({4, "A"})
-end mesh

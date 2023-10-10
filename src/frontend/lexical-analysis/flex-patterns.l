@@ -20,7 +20,7 @@
 digit           [0-9]
 identifier      [A-Za-z]|[A-Za-z][A-Za-z0-9_-]*[A-Za-z0-9]*
 string          \"[^\"]*\"
-endline         \n
+endline         [\n]+[ \f\r\t\v]*
 whitespace      [ \f\r\t\v]+
 component       Resistor|Battery|Cable|Inductor|Ammeter|Voltmeter|Switch|Capacitor|Led|Transistor
 colors          red|green|blue

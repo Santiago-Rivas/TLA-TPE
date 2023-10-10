@@ -64,7 +64,7 @@ int AssignGrammarAction(const int value, const int rValue) {
 }
 
 int ComponentGrammarAction(const int value) {
-	LogDebug("[Bison] ComponentExpressionGrammarAction(%d)", value);
+	LogDebug("[Bison] ComponentGrammarAction(%d)", value);
 	return value;
 }
 

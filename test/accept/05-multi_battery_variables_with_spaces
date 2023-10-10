@@ -1,0 +1,18 @@
+battery1 = Battery
+battery2 = Battery
+battery3 = Battery
+ 
+    
+
+
+
+start mesh
+    battery1
+    Led
+    battery2
+    Led
+    battery3
+    Resistor
+    Battery
+    Capacitor
+end mesh

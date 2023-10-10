@@ -20,3 +20,5 @@ flex-scanner.c
 program
 
 *.swp
+test/reject/00-multiuse
+test/accept/00-multiuse
