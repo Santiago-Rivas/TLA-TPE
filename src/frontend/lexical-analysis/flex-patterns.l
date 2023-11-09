@@ -17,13 +17,13 @@
 %x COMMENT
 
 /* Patrones reutilizables. */
-digit           [0-9]
-identifier      [A-Za-z]|[A-Za-z][A-Za-z0-9_-]*[A-Za-z0-9]*
+number          (-)?[0-9]+(\.[0-9]+)?
+identifier      [A-Za-z][A-Za-z0-9_-]*[A-Za-z0-9]*
 string          \"[^\"]*\"
-endline         [\n]+[ \f\r\t\v]*
+endline         [ \f\r\t\v]*[\n]+
 whitespace      [ \f\r\t\v]+
 component       Resistor|Battery|Cable|Inductor|Ammeter|Voltmeter|Switch|Capacitor|Led|Transistor
-colors          red|green|blue
+color           red|green|blue
 
 %%
 
@@ -51,15 +51,13 @@ parallel                                    { return FunctionPatternAction(yytex
 
 "="                                         { return AssignOperatorPatternAction(yytext); }
 
-{colors}                                    { return ColorComponentOperatorPatternAction(yytext, yyleng); }
+{color}                                    { return ColorComponentOperatorPatternAction(yytext, yyleng); }
 
 {component}                                 { return ComponentOperatorPatternAction(yytext, yyleng); }
 
 {endline}+                                  { return EndLinePatternAction(); }
 
-{digit}+                                    { return IntegerPatternAction(yytext, yyleng); }
-
-{digit}.{digit}+                            { return RealNumberPatternAction(yytext, yyleng); }
+{number}                                    { return IntegerPatternAction(yytext, yyleng); }
 
 {string}                                    { return StringPatternAction(yytext, yyleng); }
 
