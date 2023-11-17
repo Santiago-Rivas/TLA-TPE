@@ -12,9 +12,6 @@ typedef struct Expression Expression;
 * Para cada no-terminal se define una nueva estructura que representa su tipo
 * de dato y, por lo tanto, su nodo en el AST (Árbol de Sintaxis Abstracta).
 */
-typedef struct {
-	int value;
-} Constant;
 
 /**
 * En caso de que un no-terminal ("Factor" en este caso), posea más de una
@@ -26,8 +23,7 @@ typedef struct {
 * posee según el valor de este enumerado.
 */
 typedef enum {
-	EXPRESSION,
-	CONSTANT
+	EXPRESSION
 } FactorType;
 
 typedef struct {
@@ -49,8 +45,112 @@ struct Expression {
 	Expression * rightExpression;
 };
 
+typedef enum Color {
+    RED,
+    GREEN,
+    BLUE,
+    BLACK
+} Color;
+
+typedef enum {
+    RESISTOR,
+    BATTERY,
+    CABLE,
+    INDUCTOR,
+    AMMETER,
+    VOLTMETER,
+    SWITCH,
+    CAPACITOR,
+    LED,
+    TRANSISTOR
+} ComponentType;
+
+typedef enum {
+    VALUE_INTEGER,
+    VALUE_FLOAT,
+    VALUE_STRING
+} ValueType;
+
+typedef union {
+    int i;
+    char * s;
+    float f;
+} Value;
+
 typedef struct {
-	Expression * expression;
+    Value left;
+    ValueType leftType;
+    char * right;
+} Pair;
+
+typedef struct PairNode {
+    Pair * pair;
+    struct PairNode * next;
+} PairNode;
+
+typedef struct {
+    Value value;
+    ValueType type;
+} Constant;
+
+typedef union {
+    Constant * c;
+    PairNode * p;
+} ComponentParams;
+
+typedef enum {
+    PARAM_CONSTANT,
+    PARAM_PAIR_NODE 
+} ParamType;
+
+typedef struct {
+    ComponentParams params;
+    ParamType type;
+} ComponentParamsList;
+
+
+typedef struct {
+    ComponentType type;
+    ComponentParamsList * paramList;
+    Color color;
+} Component;
+
+typedef struct VariableNode {
+    char * identifier;
+    Component * componenet;
+	struct VariableNode * next;
+} VariableNode;
+
+typedef struct {
+	VariableNode * first;
+} Variables;
+
+typedef enum {
+    MESH_COMPONENT,
+    MESH_FUNCTION,
+    MESH_IDENTIFIER
+} MeshItemType;
+
+typedef struct FunctionNode {
+    struct MeshItemNode * mesh;
+    struct FunctionNode * next;
+} FunctionNode;
+
+typedef union {
+    Component * c;
+    FunctionNode * f;
+    char * s;
+} MeshItem;
+
+typedef struct MeshItemNode{
+    MeshItem item;
+    MeshItemType itemType;
+    Color color;
+	struct MeshItemNode * next;
+} MeshItemNode;
+
+typedef struct {
+	MeshItemNode * meshes;
 } Program;
 
 #endif

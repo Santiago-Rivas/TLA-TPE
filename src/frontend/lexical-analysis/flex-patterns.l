@@ -17,6 +17,7 @@
 %x COMMENT
 
 /* Patrones reutilizables. */
+digits          (-)?[0-9]+
 number          (-)?[0-9]+(\.[0-9]+)?
 identifier      [A-Za-z][A-Za-z0-9_-]*[A-Za-z0-9]*
 string          \"[^\"]*\"
@@ -57,7 +58,9 @@ parallel                                    { return FunctionPatternAction(yytex
 
 {endline}+                                  { return EndLinePatternAction(); }
 
-{number}                                    { return IntegerPatternAction(yytext, yyleng); }
+{digits}                                    { return IntegerPatternAction(yytext, yyleng); }
+
+{number}                                    { return RealNumberPatternAction(yytext, yyleng); }
 
 {string}                                    { return StringPatternAction(yytext, yyleng); }
 

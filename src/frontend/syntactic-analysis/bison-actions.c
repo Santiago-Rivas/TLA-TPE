@@ -31,141 +31,102 @@ void yyerror(const char * string) {
 * indica que efectivamente el programa de entrada se pudo generar con esta
 * gramática, o lo que es lo mismo, que el programa pertenece al lenguaje.
 */
-int ProgramGrammarAction(const int value) {
-	LogDebug("[Bison] ProgramGrammarAction(%d)", value);
-	/*
-	* "state" es una variable global que almacena el estado del compilador,
-	* cuyo campo "succeed" indica si la compilación fue o no exitosa, la cual
-	* es utilizada en la función "main".
-	*/
-	state.succeed = true;
-	/*
-	* Por otro lado, "result" contiene el resultado de aplicar el análisis
-	* sintáctico mediante Bison, y almacenar el nood raíz del AST construido
-	* en esta variable. Para el ejemplo de la calculadora, no hay AST porque
-	* la expresión se computa on-the-fly, y es la razón por la cual esta
-	* variable es un simple entero, en lugar de un nodo.
-	*/
-	state.result = value;
-	return value;
+Program * ProgramGrammarAction(MeshItemNode * meshes) {
+    Program * program = calloc(1, sizeof(Program));
+    program->meshes = meshes;
+    state.result = 0;
+    state.succeed = true;
+    return program;
 }
 
 // Function
-int FunctionGrammarAction(const int value) {
-	LogDebug("[Bison] FunctionGrammarAction(%d)", value);
-	return value;
+FunctionNode * FunctionParamsGrammarAction(FunctionNode * first, FunctionNode * second){
+    first->next = second;
+    return first;
+}
+
+FunctionNode * FunctionGrammarAction(MeshItemNode * meshItem) {
+    FunctionNode * functionNode = calloc(1, sizeof(FunctionNode));
+    functionNode->mesh = meshItem;
+    return functionNode;
+}
+
+MeshItem FunctionNodeToMeshItem(FunctionNode * functionNode){
+    MeshItem mi;
+    mi.f = functionNode;
+    return mi;
 }
 
 // Component
 
 int AssignGrammarAction(const int value, const int rValue) {
-	LogDebug("[Bison] AssignExpressionGrammarAction(%d = %d)", value, rValue);
 	return value;
 }
 
-int ComponentGrammarAction(const int value) {
-	LogDebug("[Bison] ComponentGrammarAction(%d)", value);
-	return value;
+Component * ComponentGrammarAction(const ComponentType value, const Color color, ComponentParamsList * params){
+    Component * component = calloc(1, sizeof(Component));
+    component->type = value;
+    component->color = color;
+    component->paramList = params;
+	return component;
 }
+
 
 // Params
 
-int PairParamsGrammarAction(const int value) {
-	LogDebug("[Bison] PairParamsGrammarAction(%d)", value);
-	return value;
+ComponentParamsList * ComponentParamsGrammarAction(ComponentParams params, const ParamType paramType){
+    ComponentParamsList * componentParamsList = calloc(1, sizeof(ComponentParamsList));
+    componentParamsList->params = params;
+    componentParamsList->type = paramType;
+    return componentParamsList;
 }
 
-int ExpressionParamsGrammarAction(const int value) {
-	LogDebug("[Bison] ExpressionFactorGrammarAction(%d)", value);
-	return value;
-}
-
-int ConstantParamsGrammarAction(const int value) {
-	LogDebug("[Bison] ConstantFactorGrammarAction(%d)", value);
-	return value;
-}
-
-
-int FullSizeParamsGrammarAction(const int value1, const char* value2) {
-	LogDebug("[Bison] FullSizeParamsGrammarAction({%d} %p)", value1, value2);
-	return value1;
-}
-
-// Pair
-
-int PairIntegerGrammarAction(const int value1, const char* value2) {
-	LogDebug("[Bison] PairFactorGrammarAction({%d, %p})", value1, value2);
-	return value1;
-}
-
-int PairStringGrammarAction(const char* value1, const char* value2) {
-	LogDebug("[Bison] PairFactorGrammarAction({%d, %p})", value1, value2);
-	return 0;
-}
-
-int PairRealGrammarAction(const float value1, const char* value2) {
-	LogDebug("[Bison] PairRealGrammarAction({%d, %p})", value1, value2);
-	return 0;
+Pair * PairGrammarAction(Value leftValue, ValueType type, Value rightValue) {
+    Pair * pair = calloc(1, sizeof(Pair));
+    pair->left = leftValue;
+    pair->leftType = type;
+    pair->right = rightValue.s;
+    return pair;
 }
 
 // Constantes
 
-int IntegerConstantGrammarAction(const int value) {
-	LogDebug("[Bison] IntegerConstantGrammarAction(%d)", value);
-	return value;
+Constant * ConstantGrammarAction(Value value, ValueType type){
+    Constant * constant = calloc(1, sizeof(Constant));
+    constant->value = value;
+    constant->type = type;
+    return constant;
+
 }
 
-int RealNumberConstantGrammarAction(const float value) {
-	LogDebug("[Bison] RealNumberConstantGrammarAction(%d)", value);
-	return 0;
+MeshItemNode * MeshGrammarAction(MeshItem meshItem, MeshItemType type, Color color){
+    MeshItemNode * meshItemNode = calloc(1, sizeof(MeshItemNode));
+    meshItemNode->item = meshItem;
+    meshItemNode->itemType = type;
+    meshItemNode->color = color;
+    return meshItemNode;
 }
 
-int IdentifierConstantGrammarAction(const int value) {
-	LogDebug("[Bison] IdentifierConstantGrammarAction(%d)", value);
-	return value;
+MeshItemNode * MeshesGrammarAction(MeshItemNode * first, MeshItemNode * second){
+    first->next = second;
+    return first;
 }
 
-int FunctionParamsGrammarAction(const int value) {
-	LogDebug("[Bison] FunctionParamsGrammarAction(%d)", value);
-	return value;
-}
-
-int FunctionParamGrammarAction(const int value) {
-	LogDebug("[Bison] FunctionParamGrammarAction(%d)", value);
-	return value;
-}
-
-int MeshGrammarAction(const int value) {
-	LogDebug("[Bison] MeshGrammarAction(%d)", value);
-	return value;
-}
-
-int MeshesGrammarAction(const int value) {
-	LogDebug("[Bison] MeshesGrammarAction(%d)", value);
-	return value;
-}
-
-int ComponentsGrammarAction(const int value) {
-	LogDebug("[Bison] ComponentsGrammarAction(%d)", value);
-	return value;
-}
-
-int PairsGrammarAction(const int value) {
-	LogDebug("[Bison] PairsGrammarAction(%d)", value);
-	return value;
+PairNode * PairsGrammarAction(Pair * first, PairNode * second) {
+    PairNode * pairNode = calloc(1, sizeof(PairNode));
+    pairNode->pair = first;
+    pairNode->next = second;
+	return pairNode;
 }
 
 int VariablesGrammarAction(const int value) {
-	LogDebug("[Bison] VariablesGrammarAction(%d)", value);
 	return value;
 }
 
 int IdentifierVariableGrammarAction(const int value) {
-	LogDebug("[Bison] IdentifierVariableGrammarAction(%d)", value);
 	return value;
 }
 
 int FunctionsGrammarAction(const int value) {
-	LogDebug("[Bison] FunctionsGrammarAction(%d)", value);
 	return value;
 }

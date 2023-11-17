@@ -16,30 +16,31 @@
 	*/
 
 	// No-terminales (frontend).
-	int program;
-	int constant;
-	int component;
-	int params;
-	int color;
-	int pair;
-	int pairs;
+	Program * program;
+	MeshItemNode * mesh;
+	MeshItemNode * meshes;
 	int beggin;
 	int end;
-	int mesh;
-	int meshes;
-	int function;
-	int function_params;
-	int function_param;
-	char * string;
-	char * identifier;
+	MeshItem function;
+	FunctionNode * function_params;
+	FunctionNode * function_param;
+	Constant * constant;
+	Component * component;
+    ComponentType componentType;
+	ComponentParamsList * params;
+	Color color;
+	Pair * pair;
+	PairNode * pairs;
 	int variable;
 	int variables;
 
 
 	// Terminales.
+	MeshItem identifier;
 	token token;
-	int integer;
-	float real;
+	Value integer;
+	Value string;
+	Value real;
 	int newLine;
 
 }
@@ -48,7 +49,7 @@
 %token <token> ERROR
 
 // IDs y tipos de los tokens terminales generados desde Flex.
-%token <token> COMPONENT
+%token <componentType> COMPONENT
 
 %token <token> ASSIGN
 %token <token> COMMA
@@ -66,7 +67,7 @@
 
 %token <integer> INTEGER
 %token <real> REAL 
-%token <token> IDENTIFIER // token??? (identifier type char*)
+%token <identifier> IDENTIFIER // token??? (identifier type char*)
 %token <mesh> MESH
 %token <beggin> BEGGIN
 %token <end> END
@@ -97,59 +98,59 @@
 
 %%
 
-program: BEGGIN MESH NEWLINE meshes END MESH                                                    { $$ = ProgramGrammarAction($1); }
-    | variables BEGGIN MESH NEWLINE meshes END MESH                                             { $$ = ProgramGrammarAction($1); }
-    | program NEWLINE                                                                           { $$ = ProgramGrammarAction($1); }
-    | NEWLINE BEGGIN MESH NEWLINE meshes END MESH                                               { $$ = ProgramGrammarAction($1); }
+program: BEGGIN MESH NEWLINE meshes END MESH                                        { $$ = ProgramGrammarAction($4); }
+    | variables BEGGIN MESH NEWLINE meshes END MESH                                 { $$ = ProgramGrammarAction($5); }
+    | program NEWLINE                                                               { $$ = $1; }
+    | NEWLINE BEGGIN MESH NEWLINE meshes END MESH                                   { $$ = ProgramGrammarAction($5); }
     ;
 
-function: FUNCTION OPEN_PARENTHESIS NEWLINE  function_params  CLOSE_PARENTHESIS                 { $$ = FunctionGrammarAction($1); }
+meshes: mesh NEWLINE                                                                { $$ = MeshesGrammarAction($1, NULL); }
+    | mesh NEWLINE meshes                                                           { $$ = MeshesGrammarAction($1, $3); }
     ;
 
-function_param: OPEN_SQUAREDBRACKET NEWLINE meshes CLOSE_SQUAREDBRACKET                         { $$ = FunctionParamGrammarAction($1); }
-
-function_params: function_param COMMA NEWLINE function_param NEWLINE                            { $$ = FunctionParamsGrammarAction($1); }
-    | function_param COMMA NEWLINE function_params                                              { $$ = FunctionParamsGrammarAction($1); }
+mesh: component                                                                     { $$ = MeshGrammarAction((MeshItem) $1, MESH_COMPONENT, BLACK); }
+    | function                                                                      { $$ = MeshGrammarAction((MeshItem) $1, MESH_FUNCTION, BLACK); }
+    | IDENTIFIER                                                                    { $$ = MeshGrammarAction((MeshItem) $1, MESH_IDENTIFIER , BLACK); }
+    | COLOR IDENTIFIER                                                              { $$ = MeshGrammarAction((MeshItem) $2, MESH_IDENTIFIER, $1); }
     ;
 
-mesh: component                                                                                 { $$ = MeshGrammarAction($1); }
-    | function                                                                                  { $$ = MeshGrammarAction($1); }
-    | IDENTIFIER                                                                                { $$ = MeshGrammarAction($1); }
-    | COLOR IDENTIFIER                                                                          { $$ = MeshGrammarAction($1); }
+function: FUNCTION OPEN_PARENTHESIS NEWLINE  function_params  CLOSE_PARENTHESIS     { $$ = (MeshItem) $4; }
     ;
 
-meshes: mesh NEWLINE                                                                            { $$ = MeshesGrammarAction($1); }
-    | mesh NEWLINE meshes                                                                       { $$ = MeshesGrammarAction($1); }
+function_params: function_param COMMA NEWLINE function_param NEWLINE                { $$ = FunctionParamsGrammarAction($1, $4); }
+    | function_param COMMA NEWLINE function_params                                  { $$ = FunctionParamsGrammarAction($1, $4); }
     ;
 
-component: COMPONENT params                                                                     { $$ = ComponentGrammarAction($1); }
-    | COMPONENT                                                                                 { $$ = ComponentGrammarAction($1); }
-    | COLOR COMPONENT                                                                           { $$ = ComponentGrammarAction($2); }
-    | COLOR COMPONENT params                                                                    { $$ = ComponentGrammarAction($2); }
+function_param: OPEN_SQUAREDBRACKET NEWLINE meshes CLOSE_SQUAREDBRACKET             { $$ = FunctionGrammarAction($3); }
+
+component: COMPONENT params                                                         { $$ = ComponentGrammarAction($1, BLACK, $2); }
+    | COMPONENT                                                                     { $$ = ComponentGrammarAction($1, BLACK, NULL); }
+    | COLOR COMPONENT                                                               { $$ = ComponentGrammarAction($2, $1, NULL); }
+    | COLOR COMPONENT params                                                        { $$ = ComponentGrammarAction($2, $1, $3); }
     ;
 
-params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS                                             { $$ = ExpressionParamsGrammarAction($2); }
-    |     OPEN_PARENTHESIS pairs CLOSE_PARENTHESIS                                              { $$ = PairParamsGrammarAction($2); }
+params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS                                 { $$ = ComponentParamsGrammarAction((ComponentParams) $2, PARAM_CONSTANT); }
+    |     OPEN_PARENTHESIS pairs CLOSE_PARENTHESIS                                  { $$ = ComponentParamsGrammarAction((ComponentParams) $2, PARAM_PAIR_NODE); }
     ;
 
-pairs: pair                                                                                     { $$ = PairsGrammarAction($1); }
-    | pair COMMA pairs                                                                          { $$ = PairsGrammarAction($1); }
+pairs: pair                                                                         { $$ = PairsGrammarAction($1, NULL); }
+    | pair COMMA pairs                                                              { $$ = PairsGrammarAction($1, $3); }
     ;
 
-pair: OPEN_BRACKET INTEGER COMMA STRING CLOSE_BRACKET                                           { $$ = PairIntegerGrammarAction($2, $4); }
-    | OPEN_BRACKET STRING COMMA STRING CLOSE_BRACKET                                            { $$ = PairStringGrammarAction($2, $4); }
-    | OPEN_BRACKET REAL COMMA STRING CLOSE_BRACKET                                              { $$ = PairRealGrammarAction($2, $4); }
+pair: OPEN_BRACKET INTEGER COMMA STRING CLOSE_BRACKET                               { $$ = PairGrammarAction($2, VALUE_INTEGER, $4); }
+    | OPEN_BRACKET STRING COMMA STRING CLOSE_BRACKET                                { $$ = PairGrammarAction($2, VALUE_STRING, $4); }
+    | OPEN_BRACKET REAL COMMA STRING CLOSE_BRACKET                                  { $$ = PairGrammarAction($2, VALUE_FLOAT, $4); }
     ;
 
-constant: INTEGER                                                                               { $$ = IntegerConstantGrammarAction($1); }
-    | REAL                                                                                      { $$ = RealNumberConstantGrammarAction($1); }
+constant: INTEGER                                                                   { $$ = ConstantGrammarAction($1, VALUE_INTEGER); }
+    | REAL                                                                          { $$ = ConstantGrammarAction($1, VALUE_FLOAT); }
     ;
 
-variables: variable NEWLINE                                                                     { $$ = VariablesGrammarAction($1); }
-    | variable NEWLINE variables                                                                { $$ = VariablesGrammarAction($1); }
+variables: variable NEWLINE                                                         { $$; }
+    | variable NEWLINE variables                                                    { $$; }
     ;
 
-variable: IDENTIFIER ASSIGN component                                                           { $$ = IdentifierVariableGrammarAction($1); }
+variable: IDENTIFIER ASSIGN component                                               { $$; }
     ;
 
 %%

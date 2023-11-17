@@ -12,46 +12,37 @@
  */
 
 // Programa.
-int ProgramGrammarAction(const int value);
+ Program * ProgramGrammarAction(MeshItemNode * meshes);
 
 //Function
-int FunctionGrammarAction(const int value);
+FunctionNode * FunctionParamsGrammarAction(FunctionNode * first, FunctionNode * second);
+
+FunctionNode * FunctionGrammarAction(MeshItemNode * mesh);
+
+MeshItem FunctionNodeToMeshItem(FunctionNode * functionNode);
 
 // Component.
-int AssignGrammarAction(const int value, const int rValue);
-int ComponentGrammarAction(const int value);
+Component * ComponentGrammarAction(const ComponentType value, const Color color, ComponentParamsList * params);
 
 // Params.
-int PairParamsGrammarAction(const int value);
-int ExpressionParamsGrammarAction(const int value);
-int ConstantParamsGrammarAction(const int value);
-int FullSizeParamsGrammarAction(const int value1, const char* value2);
+ComponentParamsList * ComponentParamsGrammarAction(ComponentParams params, const ParamType paramType);
 
 // Pair
-int PairIntegerGrammarAction(const int value1, const char* value2);
-int PairStringGrammarAction(const char* value1, const char* value2);
-int PairRealGrammarAction(const float value1, const char* value2);
+Pair * PairGrammarAction(Value leftValue, ValueType type, Value rightValue);
 
 // Constantes.
-int IntegerConstantGrammarAction(const int value);
-int RealNumberConstantGrammarAction(const float value);
-int IdentifierConstantGrammarAction(const int value);
+Constant * ConstantGrammarAction(Value value, ValueType type);
 
-int FunctionParamsGrammarAction(const int value); 
-int FunctionParamGrammarAction(const int value); 
+// Meshes
+MeshItemNode * MeshGrammarAction(MeshItem meshItem, MeshItemType type, Color color);
 
-int MeshGrammarAction(const int value); 
+MeshItemNode * MeshesGrammarAction(MeshItemNode * first, MeshItemNode * second);
 
-int MeshesGrammarAction(const int value);
-
-int ComponentsGrammarAction(const int value); 
-
-int PairsGrammarAction(const int value); 
+PairNode * PairsGrammarAction(Pair * first, PairNode * second);
 
 int VariablesGrammarAction(const int value);
 
 int IdentifierVariableGrammarAction(const int value);
-    
-int FunctionsGrammarAction(const int value);
+
 
 #endif
