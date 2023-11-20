@@ -1,11 +1,13 @@
 #include "backend/code-generation/generator.h"
 #include "backend/support/logger.h"
 #include "backend/support/shared.h"
+#include "backend/semantic-analysis/symbol-table.h"
 #include "frontend/syntactic-analysis/bison-parser.h"
 #include <stdio.h>
 
 // Estado de la aplicación.
 CompilerState state;
+khash_t(comp) *map;
 
 // Punto de entrada principal del compilador.
 const int main(const int argumentCount, const char ** arguments) {
@@ -13,12 +15,12 @@ const int main(const int argumentCount, const char ** arguments) {
 	state.program = NULL;
 	state.result = 0;
 	state.succeed = false;
+	map = kh_init(comp);
 
 	// Mostrar parámetros recibidos por consola.
 	for (int i = 0; i < argumentCount; ++i) {
 		LogInfo("Argumento %d: '%s'", i, arguments[i]);
 	}
-
 	// Compilar el programa de entrada.
 	LogInfo("Compilando...\n");
 	const int result = yyparse();
@@ -45,5 +47,6 @@ const int main(const int argumentCount, const char ** arguments) {
 			LogError("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).", result);
 	}
 	LogInfo("Fin.");
+	cleanup_variables(map);
 	return result;
 }

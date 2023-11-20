@@ -56,6 +56,9 @@ else ()
 
 endif ()
 
+# Include the directory containing khash.h
+include_directories(src/backend/semantic-analysis/)
+
 # Especificar punto de entrada del proyecto y códigos fuente (extensión *.c).
 # Los *.h se incluyen automáticamente desde estos fuentes.
 add_executable(Compiler
@@ -63,6 +66,7 @@ add_executable(Compiler
 	src/backend/code-generation/generator.c
 	src/backend/domain-specific/calculator.c
 	src/backend/support/logger.c
+	src/backend/semantic-analysis/symbol-table.c
 	src/frontend/lexical-analysis/flex-actions.c
 	src/frontend/lexical-analysis/flex-scanner.c
 	src/frontend/syntactic-analysis/bison-actions.c
