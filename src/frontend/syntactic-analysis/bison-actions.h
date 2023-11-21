@@ -26,20 +26,20 @@ MeshItem * FunctionNodeToMeshItem(FunctionNode * functionNode);
 MeshItem * ComponentGrammarAction(const ComponentType value, const Color color, ComponentParamsList * params);
 
 // Params.
-ComponentParamsList * ComponentParamsGrammarAction(ComponentParams params, const ParamType paramType);
+ComponentParamsList * ComponentParamsGrammarAction(ComponentParams * params, const ParamType paramType);
 
 // Pair
 Pair * PairGrammarAction(Value leftValue, ValueType type, Value rightValue);
 
 // Constantes.
-Constant * ConstantGrammarAction(Value value, ValueType type);
+ComponentParams * ConstantGrammarAction(Value value, ValueType type);
 
 // Meshes
 MeshItemNode * MeshGrammarAction(MeshItem * meshItem, MeshItemType type, Color color);
 
 MeshItemNode * MeshesGrammarAction(MeshItemNode * first, MeshItemNode * second);
 
-PairNode * PairsGrammarAction(Pair * first, PairNode * second);
+ComponentParams * PairsGrammarAction(Pair * first, ComponentParams * second);
 
 int VariablesGrammarAction(Variable * variable);
 

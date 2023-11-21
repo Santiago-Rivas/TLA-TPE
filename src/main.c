@@ -1,4 +1,5 @@
 #include "backend/code-generation/generator.h"
+#include "backend/domain-specific/mesh.h"
 #include "backend/support/logger.h"
 #include "backend/support/shared.h"
 #include "backend/semantic-analysis/symbol-table.h"
@@ -29,6 +30,7 @@ const int main(const int argumentCount, const char ** arguments) {
 			// inicial de la gramática satisfactoriamente.
 			if (state.succeed) {
 				LogInfo("La compilacion fue exitosa.");
+                EvaluateProgram(state.program, &state.output);
 				Generator("output.tex", state.output);
 			}
 			else {

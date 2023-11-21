@@ -32,18 +32,6 @@ int EvaluateProgram(Program * program, char ** output){
     pencil.buf = buffer;
     //LogDebug("Buffer Creation Success");
 
-//    PointToPointConnection(buffer, (Point) {0,0}, (Point) {0,1}, BATTERY, "Hola");
-//    PointToPointConnection(buffer, (Point) {0,1}, (Point) {0,2}, CABLE, "Hola");
-//    PointToPointConnection(buffer, (Point) {0,2}, (Point) {0,4}, RESISTOR, "Hola");
-//
-//    PointToPointConnection(buffer, (Point) {0,4}, (Point) {2,4}, LED, "Hola");
-//    PointToPointConnection(buffer, (Point) {2,4}, (Point) {2,0}, AMMETER, "Hola");
-//    PointToPointConnection(buffer, (Point) {2,0}, (Point) {0,0}, CABLE, "Hola");
-
-    // PointToPointConnection(buffer, (Point) {2,4}, (Point) {6,4}, LED, "Hola");
-    // PointToPointConnection(buffer, (Point) {6,4}, (Point) {6,0}, AMMETER, "Hola");
-    // PointToPointConnection(buffer, (Point) {6,0}, (Point) {0,0}, CABLE, "Hola");
-
     *output = buffer->str;
     return 0;
 }

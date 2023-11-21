@@ -35,7 +35,7 @@ Program *ProgramGrammarAction(MeshItemNode *meshes) {
     Program *program = calloc(1, sizeof(Program));
     program->meshes = meshes;
 
-    EvaluateProgram(program, &state.output);
+    state.program = program;
 
     state.result = 0;
     state.succeed = true;
@@ -84,11 +84,9 @@ MeshItem * ComponentGrammarAction(const ComponentType value, const Color color,
 
 // Params
 
-ComponentParamsList *ComponentParamsGrammarAction(ComponentParams params,
-                                                  const ParamType paramType) {
-    ComponentParamsList *componentParamsList =
-        calloc(1, sizeof(ComponentParamsList));
-    componentParamsList->params = params;
+ComponentParamsList *ComponentParamsGrammarAction(ComponentParams * params, const ParamType paramType) {
+    ComponentParamsList *componentParamsList = calloc(1, sizeof(ComponentParamsList));
+    componentParamsList->params = *params;
     componentParamsList->type = paramType;
     return componentParamsList;
 }
@@ -103,28 +101,33 @@ Pair *PairGrammarAction(Value leftValue, ValueType type, Value rightValue) {
 
 // Constantes
 
-Constant *ConstantGrammarAction(Value value, ValueType type) {
-    Constant *constant = calloc(1, sizeof(Constant));
-    constant->value = value;
-    constant->type = type;
-    return constant;
+ComponentParams * ConstantGrammarAction(Value value, ValueType type) {
+    ComponentParams * componentParams = calloc(1, sizeof(ComponentParams));
+    componentParams->c = calloc(1, sizeof(Constant));
+    componentParams->c->value = value;
+    componentParams->c->type = type;
+    return componentParams;
 }
 
-MeshItemNode *MeshGrammarAction(MeshItem * meshItem, MeshItemType type,
-                                Color color) {
+MeshItemNode *MeshGrammarAction(MeshItem * meshItem, MeshItemType type, Color color) {
     LogDebug("Entered MeshGrammarAction");
     MeshItemNode *meshItemNode = calloc(1, sizeof(MeshItemNode));
 
     if (type == MESH_IDENTIFIER) {
         LogDebug("MESH_IDENTIFIER");
         Comp * comp = get_variable(state.map, meshItem->s);
-        meshItemNode->item = (MeshItem) comp->component;
+        meshItem->c = comp->component;
+        meshItemNode->item = *meshItem;
+        meshItemNode->itemType = MESH_COMPONENT;
     } else {
         meshItemNode->item = *meshItem;
+        meshItemNode->itemType = type;
     }
-
-    meshItemNode->itemType = type;
-    meshItemNode->color = color;
+    if (color == BLACK) {
+        meshItemNode->color = meshItem->c->color;
+    } else {
+        meshItemNode->color = color;
+    }
     return meshItemNode;
 }
 
@@ -133,11 +136,12 @@ MeshItemNode *MeshesGrammarAction(MeshItemNode *first, MeshItemNode *second) {
     return first;
 }
 
-PairNode *PairsGrammarAction(Pair *first, PairNode *second) {
-    PairNode *pairNode = calloc(1, sizeof(PairNode));
-    pairNode->pair = first;
-    pairNode->next = second;
-    return pairNode;
+ComponentParams * PairsGrammarAction(Pair *first, ComponentParams * second) {
+    ComponentParams * componentParams = calloc(1, sizeof(ComponentParams));
+    componentParams->p = calloc(1, sizeof(PairNode));
+    componentParams->p->pair = first;
+    componentParams->p->next = second->p;
+    return componentParams;
 }
 
 int VariablesGrammarAction(Variable * variable) {

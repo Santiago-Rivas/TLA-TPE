@@ -24,13 +24,13 @@
 	MeshItem * function;
 	FunctionNode * function_params;
 	FunctionNode * function_param;
-	Constant * constant;
+	ComponentParams * constant;
 	MeshItem * component;
     ComponentType componentType;
 	ComponentParamsList * params;
 	Color color;
 	Pair * pair;
-	PairNode * pairs;
+	ComponentParams * pairs;
 	Variable * variable;
 	int variables;
 
@@ -128,8 +128,8 @@ component: COMPONENT params                                                     
     | COLOR COMPONENT params                                                        { $$ = ComponentGrammarAction($2, $1, $3); }
     ;
 
-params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS                                 { $$ = ComponentParamsGrammarAction((ComponentParams) $2, PARAM_CONSTANT); }
-    |     OPEN_PARENTHESIS pairs CLOSE_PARENTHESIS                                  { $$ = ComponentParamsGrammarAction((ComponentParams) $2, PARAM_PAIR_NODE); }
+params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS                                 { $$ = ComponentParamsGrammarAction($2, PARAM_CONSTANT); }
+    |     OPEN_PARENTHESIS pairs CLOSE_PARENTHESIS                                  { $$ = ComponentParamsGrammarAction($2, PARAM_PAIR_NODE); }
     ;
 
 pairs: pair                                                                         { $$ = PairsGrammarAction($1, NULL); }
