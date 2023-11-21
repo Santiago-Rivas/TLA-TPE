@@ -1,0 +1,9 @@
+start mesh
+    parallel(
+        [
+            Transistor
+            Led
+        ]
+    )
+end mesh
+

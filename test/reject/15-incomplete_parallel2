@@ -1,0 +1,10 @@
+start mesh
+    parallel (
+        [
+            Battery
+            Led
+        ],
+        [
+            Resistor
+    )
+end mesh

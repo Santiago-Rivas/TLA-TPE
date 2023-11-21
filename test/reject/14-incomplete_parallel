@@ -1,0 +1,20 @@
+start mesh
+    parallel (
+        [
+            Battery
+            Capacitor
+        ],
+        [
+            Resistor
+        ]
+    )
+    parallel (
+        [
+            Inductor
+            Switch
+        ],
+        [
+            Ammeter
+            Voltmeter
+        ]
+end mesh

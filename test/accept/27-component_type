@@ -1,0 +1,5 @@
+resistor = Resistor({4, "Lala"})
+
+start mesh
+resistor
+end mesh
