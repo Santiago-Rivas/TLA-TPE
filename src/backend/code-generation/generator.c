@@ -14,7 +14,7 @@ int Generator(char * fileName, char * output) {
                         \\usepackage[utf8]{inputenc}\
                         \\usepackage{circuitikz}\
                         \\begin{document}\
-                        \\begin{circuitikz} \\draw""";
+                        \\begin{circuitikz}""";
 
     char * docClose = """\
                         \\end{circuitikz}\

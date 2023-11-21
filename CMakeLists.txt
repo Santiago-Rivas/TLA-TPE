@@ -66,6 +66,7 @@ add_executable(Compiler
 	src/backend/code-generation/generator.c
 	src/backend/domain-specific/calculator.c
 	src/backend/domain-specific/mesh.c
+	src/backend/domain-specific/buffer.c
 	src/backend/support/logger.c
 	src/backend/semantic-analysis/symbol-table.c
 	src/frontend/lexical-analysis/flex-actions.c
