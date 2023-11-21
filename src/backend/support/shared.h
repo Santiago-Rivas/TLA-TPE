@@ -51,10 +51,7 @@ typedef struct {
 	// El nodo raíz del AST (se usará cuando se implemente el backend).
 	Program * program;
 
-	// Agregar lo que sea necesario para el compilador.
-	// Agregar una pila para manipular scopes.
-	// Agregar una tabla de símbolos.
-	// ...
+    char * output;
 
 } CompilerState;
 

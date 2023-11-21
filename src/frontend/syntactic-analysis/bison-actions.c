@@ -1,4 +1,4 @@
-#include "../../backend/domain-specific/calculator.h"
+#include "../../backend/domain-specific/mesh.h"
 #include "../../backend/support/logger.h"
 #include "bison-actions.h"
 #include <stdio.h>
@@ -34,8 +34,12 @@ void yyerror(const char * string) {
 Program * ProgramGrammarAction(MeshItemNode * meshes) {
     Program * program = calloc(1, sizeof(Program));
     program->meshes = meshes;
+
+    EvaluateProgram(program, &state.output);
+
     state.result = 0;
     state.succeed = true;
+
     return program;
 }
 

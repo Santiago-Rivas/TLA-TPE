@@ -24,3 +24,8 @@ test/reject/00-multiuse
 test/accept/00-multiuse
 
 out
+*.out
+*.log
+*.aux
+*.pdf
+*.tex
