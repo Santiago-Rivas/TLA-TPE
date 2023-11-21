@@ -115,9 +115,9 @@ typedef struct {
     Color color;
 } Component;
 
-typedef struct {
+typedef struct Variable {
     char * identifier;
-    Component * componenet;
+    Component * component;
 } Variable;
 
 typedef enum {

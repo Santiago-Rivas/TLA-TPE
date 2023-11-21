@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 char * DrawComponentType(ComponentType componentType, char * message);
-char * DrawComponent(char * componenetName, char * message);
+char * DrawComponent(char * componentName, char * message);
 Point CreatePoint(unsigned int x, unsigned int y);
 
 int EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes);

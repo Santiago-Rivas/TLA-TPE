@@ -179,7 +179,7 @@ ComponentParams * PairsGrammarAction(Pair *first, ComponentParams * second) {
 
 int VariablesGrammarAction(Variable * variable) {
     // TODO: Return response
-    add_variable(state.map, variable->identifier, variable->componenet);
+    add_variable(state.map, variable->identifier, variable->component);
     // TODO: Update variable
     return 0; 
 }
@@ -190,7 +190,7 @@ Variable * IdentifierVariableGrammarAction(MeshItem * identifier, MeshItem * mes
         return NULL;
     }
     variable->identifier = strdup(identifier->s);
-    variable->componenet = meshItem->c;
+    variable->component = meshItem->c;
     return variable;
 }
 
