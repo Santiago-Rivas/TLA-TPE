@@ -21,6 +21,9 @@
 
 char *copyLexeme(const char *lexeme, const int length) {
     char *lexemeCopy = (char *)calloc(length + 1, sizeof(char));
+    if (lexemeCopy == NULL) {
+        return NULL;
+    }
     strncpy(lexemeCopy, lexeme, length);
     return lexemeCopy;
 }

@@ -95,7 +95,7 @@ int EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
 }
 
 int EvaluateComponents() {
-    
+    return 0;
 }
 
 char * DrawComponent(char * componentName, char * message) {
