@@ -11,7 +11,7 @@ void add_variable(khash_t(comp) *map, const char *name, const Component * compon
         var.component->type = component->type;
         var.component->color = component->color;
         kh_value(map, iter) = var;
-        printf("Variable '%s' added to the map. Color: '%d', Type: '%d'\n", name, component->color, component->type, component->color, component->type);
+        printf("Variable '%s' added to the map. Color: '%d', Type: '%d'\n", name, component->color, component->type);
         // printf("Variable '%s' added to the map. wa\n", name); 
     } else {
         printf("Variable '%s' already exists.\n", name);

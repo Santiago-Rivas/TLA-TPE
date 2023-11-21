@@ -29,3 +29,7 @@ out
 *.aux
 *.pdf
 *.tex
+*.gz
+
+bison-3.8.2/*
+make-4.3/*

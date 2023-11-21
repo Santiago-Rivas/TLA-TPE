@@ -110,9 +110,9 @@ int EvaluateComponents() {
     
 }
 
-char * DrawComponent(char * componenetName, char * message) {
-    char * str = malloc(strlen(componenetName) + strlen(message) + 12);
-    sprintf(str, " to [%s, l_=$%s$] ", componenetName, message);
+char * DrawComponent(char * componentName, char * message) {
+    char * str = malloc(strlen(componentName) + strlen(message) + 15);
+    sprintf(str, " to [%s, l_=$%s$] ", componentName, message);
     return str;
 }
 
