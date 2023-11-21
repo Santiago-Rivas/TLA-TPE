@@ -19,7 +19,7 @@
 	Program * program;
 	MeshItemNode * mesh;
 	MeshItemNode * meshes;
-	int beggin;
+	int initiate;
 	int end;
 	MeshItem * function;
 	FunctionNode * function_params;
@@ -61,14 +61,14 @@
 %token <token> CLOSE_BRACKET
 %token <token> FUNCTION
 
-%token <token> OPEN_SQUAREDBRACKET
-%token <token> CLOSE_SQUAREDBRACKET
+%token <token> OPEN_SQUAREBRACKET
+%token <token> CLOSE_SQUAREBRACKET
 
 %token <integer> INTEGER
 %token <real> REAL 
 %token <identifier> IDENTIFIER // token??? (identifier type char*)
 %token <mesh> MESH
-%token <beggin> BEGGIN
+%token <initiate> INITIATE
 %token <end> END
 %token <color> COLOR
 %token <string> STRING
@@ -97,10 +97,10 @@
 
 %%
 
-program: BEGGIN MESH NEWLINE meshes END MESH                                        { $$ = ProgramGrammarAction($4); }
-    | variables BEGGIN MESH NEWLINE meshes END MESH                                 { $$ = ProgramGrammarAction($5); }
+program: INITIATE MESH NEWLINE meshes END MESH                                        { $$ = ProgramGrammarAction($4); }
+    | variables INITIATE MESH NEWLINE meshes END MESH                                 { $$ = ProgramGrammarAction($5); }
     | program NEWLINE                                                               { $$ = $1; }
-    | NEWLINE BEGGIN MESH NEWLINE meshes END MESH                                   { $$ = ProgramGrammarAction($5); }
+    | NEWLINE INITIATE MESH NEWLINE meshes END MESH                                   { $$ = ProgramGrammarAction($5); }
     ;
 
 meshes: mesh NEWLINE                                                                { $$ = MeshesGrammarAction($1, NULL); }
@@ -120,7 +120,7 @@ function_params: function_param COMMA NEWLINE function_param NEWLINE            
     | function_param COMMA NEWLINE function_params                                  { $$ = FunctionParamsGrammarAction($1, $4); }
     ;
 
-function_param: OPEN_SQUAREDBRACKET NEWLINE meshes CLOSE_SQUAREDBRACKET             { $$ = FunctionGrammarAction($3); }
+function_param: OPEN_SQUAREBRACKET NEWLINE meshes CLOSE_SQUAREBRACKET             { $$ = FunctionGrammarAction($3); }
 
 component: COMPONENT params                                                         { $$ = ComponentGrammarAction($1, BLACK, $2); }
     | COMPONENT                                                                     { $$ = ComponentGrammarAction($1, BLACK, NULL); }

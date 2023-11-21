@@ -91,14 +91,14 @@ token CloseBracketsPatternAction() {
 
 token OpenSquareBracketsPatternAction() {
     LogDebug("[Flex] OpenSquareBracketsPatternAction: '['.");
-    yylval.token = OPEN_SQUAREDBRACKET;
-    return OPEN_SQUAREDBRACKET;
+    yylval.token = OPEN_SQUAREBRACKET;
+    return OPEN_SQUAREBRACKET;
 }
 
 token CloseSquareBracketsPatternAction() {
     LogDebug("[Flex] CloseSquareBracketsPatternAction: ']'.");
-    yylval.token = CLOSE_SQUAREDBRACKET;
-    return CLOSE_SQUAREDBRACKET;
+    yylval.token = CLOSE_SQUAREBRACKET;
+    return CLOSE_SQUAREBRACKET;
 }
 
 token OpenParenthesisPatternAction() {
@@ -149,8 +149,8 @@ token StartPatternAction(const char *lexeme, const int length) {
     char *lexemeCopy = copyLexeme(lexeme, length);
     LogDebug("[Flex] StartPatternAction: 'start'.");
     free(lexemeCopy);
-    yylval.beggin = BEGGIN;
-    return BEGGIN;
+    yylval.initiate = INITIATE;
+    return INITIATE;
 }
 
 token MeshPatternAction(const char *lexeme, const int length) {
