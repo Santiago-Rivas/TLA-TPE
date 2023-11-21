@@ -41,9 +41,9 @@ MeshItemNode * MeshesGrammarAction(MeshItemNode * first, MeshItemNode * second);
 
 PairNode * PairsGrammarAction(Pair * first, PairNode * second);
 
-int VariablesGrammarAction(const int value);
+int VariablesGrammarAction(Variable * variable);
 
-int IdentifierVariableGrammarAction(const int value);
+Variable * IdentifierVariableGrammarAction(MeshItem identifier, Component * component);
 
 
 #endif

@@ -7,7 +7,6 @@
 
 // Estado de la aplicación.
 CompilerState state;
-khash_t(comp) *map;
 
 // Punto de entrada principal del compilador.
 const int main(const int argumentCount, const char ** arguments) {
@@ -15,7 +14,7 @@ const int main(const int argumentCount, const char ** arguments) {
 	state.program = NULL;
 	state.result = 0;
 	state.succeed = false;
-	map = kh_init(comp);
+	state.map = kh_init(comp);
 
 	// Mostrar parámetros recibidos por consola.
 	for (int i = 0; i < argumentCount; ++i) {
@@ -47,6 +46,6 @@ const int main(const int argumentCount, const char ** arguments) {
 			LogError("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).", result);
 	}
 	LogInfo("Fin.");
-	cleanup_variables(map);
+	cleanup_variables(state.map);
 	return result;
 }

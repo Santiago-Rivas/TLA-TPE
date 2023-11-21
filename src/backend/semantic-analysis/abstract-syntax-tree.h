@@ -23,26 +23,26 @@ typedef struct Expression Expression;
 * posee según el valor de este enumerado.
 */
 typedef enum {
-	EXPRESSION
+    EXPRESSION
 } FactorType;
 
 typedef struct {
-	FactorType type;
-	Expression * expression;
+    FactorType type;
+    Expression * expression;
 } Factor;
 
 typedef enum {
-	ADDITION,
-	SUBTRACTION,
-	MULTIPLICATION,
-	DIVISION,
-	FACTOR
+    ADDITION,
+    SUBTRACTION,
+    MULTIPLICATION,
+    DIVISION,
+    FACTOR
 } ExpressionType;
 
 struct Expression {
-	ExpressionType type;
-	Expression * leftExpression;
-	Expression * rightExpression;
+    ExpressionType type;
+    Expression * leftExpression;
+    Expression * rightExpression;
 };
 
 typedef enum Color {
@@ -115,15 +115,10 @@ typedef struct {
     Color color;
 } Component;
 
-typedef struct VariableNode {
+typedef struct {
     char * identifier;
     Component * componenet;
-	struct VariableNode * next;
-} VariableNode;
-
-typedef struct {
-	VariableNode * first;
-} Variables;
+} Variable;
 
 typedef enum {
     MESH_COMPONENT,
@@ -132,6 +127,7 @@ typedef enum {
 } MeshItemType;
 
 typedef struct FunctionNode {
+    int level;
     struct MeshItemNode * mesh;
     struct FunctionNode * next;
 } FunctionNode;
@@ -146,11 +142,11 @@ typedef struct MeshItemNode{
     MeshItem item;
     MeshItemType itemType;
     Color color;
-	struct MeshItemNode * next;
+    struct MeshItemNode * next;
 } MeshItemNode;
 
 typedef struct {
-	MeshItemNode * meshes;
+    MeshItemNode * meshes;
 } Program;
 
 #endif

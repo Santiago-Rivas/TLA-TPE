@@ -31,9 +31,8 @@
 	Color color;
 	Pair * pair;
 	PairNode * pairs;
-	int variable;
+	Variable * variable;
 	int variables;
-
 
 	// Terminales.
 	MeshItem identifier;
@@ -146,11 +145,11 @@ constant: INTEGER                                                               
     | REAL                                                                          { $$ = ConstantGrammarAction($1, VALUE_FLOAT); }
     ;
 
-variables: variable NEWLINE                                                         { $$; }
-    | variable NEWLINE variables                                                    { $$; }
+variables: variable NEWLINE                                                         { $$ = VariablesGrammarAction($1); }
+    | variable NEWLINE variables                                                    { $$ = VariablesGrammarAction($1); }
     ;
 
-variable: IDENTIFIER ASSIGN component                                               { $$; }
+variable: IDENTIFIER ASSIGN component                                               { $$ = IdentifierVariableGrammarAction($1, $3); }
     ;
 
 %%
