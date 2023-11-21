@@ -20,10 +20,10 @@ FunctionNode * FunctionParamsGrammarAction(FunctionNode * first, FunctionNode * 
 
 FunctionNode * FunctionGrammarAction(MeshItemNode * mesh);
 
-MeshItem FunctionNodeToMeshItem(FunctionNode * functionNode);
+MeshItem * FunctionNodeToMeshItem(FunctionNode * functionNode);
 
 // Component.
-Component * ComponentGrammarAction(const ComponentType value, const Color color, ComponentParamsList * params);
+MeshItem * ComponentGrammarAction(const ComponentType value, const Color color, ComponentParamsList * params);
 
 // Params.
 ComponentParamsList * ComponentParamsGrammarAction(ComponentParams params, const ParamType paramType);
@@ -35,7 +35,7 @@ Pair * PairGrammarAction(Value leftValue, ValueType type, Value rightValue);
 Constant * ConstantGrammarAction(Value value, ValueType type);
 
 // Meshes
-MeshItemNode * MeshGrammarAction(MeshItem meshItem, MeshItemType type, Color color);
+MeshItemNode * MeshGrammarAction(MeshItem * meshItem, MeshItemType type, Color color);
 
 MeshItemNode * MeshesGrammarAction(MeshItemNode * first, MeshItemNode * second);
 
@@ -43,7 +43,7 @@ PairNode * PairsGrammarAction(Pair * first, PairNode * second);
 
 int VariablesGrammarAction(Variable * variable);
 
-Variable * IdentifierVariableGrammarAction(MeshItem identifier, Component * component);
+Variable * IdentifierVariableGrammarAction(MeshItem * identifier, MeshItem * meshItem);
 
 
 #endif

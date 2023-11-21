@@ -61,9 +61,9 @@ FunctionNode *FunctionGrammarAction(MeshItemNode *meshItem) {
     return functionNode;
 }
 
-MeshItem FunctionNodeToMeshItem(FunctionNode *functionNode) {
-    MeshItem mi;
-    mi.f = functionNode;
+MeshItem * FunctionNodeToMeshItem(FunctionNode *functionNode) {
+    MeshItem * mi = calloc(1, sizeof(MeshItem));
+    mi->f = functionNode;
     return mi;
 }
 
@@ -71,13 +71,15 @@ MeshItem FunctionNodeToMeshItem(FunctionNode *functionNode) {
 
 int AssignGrammarAction(const int value, const int rValue) { return value; }
 
-Component *ComponentGrammarAction(const ComponentType value, const Color color,
+MeshItem * ComponentGrammarAction(const ComponentType value, const Color color,
                                   ComponentParamsList *params) {
     Component *component = calloc(1, sizeof(Component));
     component->type = value;
     component->color = color;
     component->paramList = params;
-    return component;
+    MeshItem * meshItem = calloc(1, sizeof(MeshItem));
+    meshItem->c = component;
+    return meshItem;
 }
 
 // Params
@@ -108,17 +110,17 @@ Constant *ConstantGrammarAction(Value value, ValueType type) {
     return constant;
 }
 
-MeshItemNode *MeshGrammarAction(MeshItem meshItem, MeshItemType type,
+MeshItemNode *MeshGrammarAction(MeshItem * meshItem, MeshItemType type,
                                 Color color) {
     LogDebug("Entered MeshGrammarAction");
     MeshItemNode *meshItemNode = calloc(1, sizeof(MeshItemNode));
 
     if (type == MESH_IDENTIFIER) {
         LogDebug("MESH_IDENTIFIER");
-        Comp * comp = get_variable(state.map, meshItem.s);
+        Comp * comp = get_variable(state.map, meshItem->s);
         meshItemNode->item = (MeshItem) comp->component;
     } else {
-        meshItemNode->item = meshItem;
+        meshItemNode->item = *meshItem;
     }
 
     meshItemNode->itemType = type;
@@ -145,10 +147,10 @@ int VariablesGrammarAction(Variable * variable) {
     return 0; 
 }
 
-Variable * IdentifierVariableGrammarAction(MeshItem identifier, Component * component) {
+Variable * IdentifierVariableGrammarAction(MeshItem * identifier, MeshItem * meshItem) {
     Variable * variable = calloc(1, sizeof(Variable));
-    variable->identifier = strdup(identifier.s);
-    variable->componenet = component;
+    variable->identifier = strdup(identifier->s);
+    variable->componenet = meshItem->c;
     return variable;
 }
 

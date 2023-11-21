@@ -9,6 +9,18 @@ typedef struct Buffer {
     int maxLen;
 } Buffer;
 
+typedef struct {
+    unsigned int x;
+    unsigned int y;
+} Point;
+
+typedef struct {
+    Point currentPoint;
+    unsigned int level;
+    Buffer * buf;
+} Pencil;
+
+
 Buffer * BufferInit();
 void BufferFree(Buffer * buf);
 int ConcatString(Buffer * buf, char * string);
