@@ -143,6 +143,9 @@ MeshItemNode *MeshGrammarAction(MeshItem * meshItem, MeshItemType type, Color co
     if (type == MESH_IDENTIFIER) {
         LogDebug("MESH_IDENTIFIER");
         Comp * comp = get_variable(state.map, meshItem->s);
+        if (comp == NULL) {
+            return NULL;
+        }
         meshItem->c = comp->component;
         meshItemNode->item = *meshItem;
         meshItemNode->itemType = MESH_COMPONENT;
@@ -159,6 +162,9 @@ MeshItemNode *MeshGrammarAction(MeshItem * meshItem, MeshItemType type, Color co
 }
 
 MeshItemNode *MeshesGrammarAction(MeshItemNode *first, MeshItemNode *second) {
+    if (first == NULL) {
+        return NULL;
+    }
     first->next = second;
     return first;
 }
@@ -173,7 +179,11 @@ ComponentParams * PairsGrammarAction(Pair *first, ComponentParams * second) {
         return NULL;
     }
     componentParams->p->pair = first;
-    componentParams->p->next = second->p;
+    if (second == NULL) {
+        componentParams->p->next = NULL;
+    } else {
+        componentParams->p->next = second->p;
+    }
     return componentParams;
 }
 
