@@ -21,6 +21,9 @@
 
 char *copyLexeme(const char *lexeme, const int length) {
     char *lexemeCopy = (char *)calloc(length + 1, sizeof(char));
+    if (lexemeCopy == NULL) {
+        return NULL;
+    }
     strncpy(lexemeCopy, lexeme, length);
     return lexemeCopy;
 }
@@ -137,7 +140,8 @@ token IdentifierPatterAction(const char *lexeme, const int length) {
     char *lexemeCopy = copyLexeme(lexeme, length);
     LogDebug("[Flex] IdentifierPatternAction: '%s' (length = %d).", lexemeCopy,
              length);
-    yylval.identifier.s = lexemeCopy;
+    yylval.identifier = calloc(1, sizeof(MeshItem));
+    yylval.identifier->s = lexemeCopy;
     return IDENTIFIER;
 }
 

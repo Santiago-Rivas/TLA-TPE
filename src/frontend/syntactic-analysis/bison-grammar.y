@@ -21,21 +21,21 @@
 	MeshItemNode * meshes;
 	int beggin;
 	int end;
-	MeshItem function;
+	MeshItem * function;
 	FunctionNode * function_params;
 	FunctionNode * function_param;
-	Constant * constant;
-	Component * component;
+	ComponentParams * constant;
+	MeshItem * component;
     ComponentType componentType;
 	ComponentParamsList * params;
 	Color color;
 	Pair * pair;
-	PairNode * pairs;
+	ComponentParams * pairs;
 	Variable * variable;
 	int variables;
 
 	// Terminales.
-	MeshItem identifier;
+	MeshItem * identifier;
 	token token;
 	Value integer;
 	Value string;
@@ -107,13 +107,13 @@ meshes: mesh NEWLINE                                                            
     | mesh NEWLINE meshes                                                           { $$ = MeshesGrammarAction($1, $3); }
     ;
 
-mesh: component                                                                     { $$ = MeshGrammarAction((MeshItem) $1, MESH_COMPONENT, BLACK); }
-    | function                                                                      { $$ = MeshGrammarAction((MeshItem) $1, MESH_FUNCTION, BLACK); }
-    | IDENTIFIER                                                                    { $$ = MeshGrammarAction((MeshItem) $1, MESH_IDENTIFIER , BLACK); }
-    | COLOR IDENTIFIER                                                              { $$ = MeshGrammarAction((MeshItem) $2, MESH_IDENTIFIER, $1); }
+mesh: component                                                                     { $$ = MeshGrammarAction($1, MESH_COMPONENT, BLACK); }
+    | function                                                                      { $$ = MeshGrammarAction($1, MESH_FUNCTION, BLACK); }
+    | IDENTIFIER                                                                    { $$ = MeshGrammarAction($1, MESH_IDENTIFIER , BLACK); }
+    | COLOR IDENTIFIER                                                              { $$ = MeshGrammarAction($2, MESH_IDENTIFIER, $1); }
     ;
 
-function: FUNCTION OPEN_PARENTHESIS NEWLINE  function_params  CLOSE_PARENTHESIS     { $$ = (MeshItem) $4; }
+function: FUNCTION OPEN_PARENTHESIS NEWLINE  function_params  CLOSE_PARENTHESIS     { $$ = FunctionNodeToMeshItem($4); }
     ;
 
 function_params: function_param COMMA NEWLINE function_param NEWLINE                { $$ = FunctionParamsGrammarAction($1, $4); }
@@ -128,8 +128,8 @@ component: COMPONENT params                                                     
     | COLOR COMPONENT params                                                        { $$ = ComponentGrammarAction($2, $1, $3); }
     ;
 
-params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS                                 { $$ = ComponentParamsGrammarAction((ComponentParams) $2, PARAM_CONSTANT); }
-    |     OPEN_PARENTHESIS pairs CLOSE_PARENTHESIS                                  { $$ = ComponentParamsGrammarAction((ComponentParams) $2, PARAM_PAIR_NODE); }
+params: OPEN_PARENTHESIS constant CLOSE_PARENTHESIS                                 { $$ = ComponentParamsGrammarAction($2, PARAM_CONSTANT); }
+    |     OPEN_PARENTHESIS pairs CLOSE_PARENTHESIS                                  { $$ = ComponentParamsGrammarAction($2, PARAM_PAIR_NODE); }
     ;
 
 pairs: pair                                                                         { $$ = PairsGrammarAction($1, NULL); }
