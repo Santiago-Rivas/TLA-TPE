@@ -3,7 +3,7 @@ start mesh
 	    [
             Battery
             Led
-            Capacitor
+            Battery
 	    ],
 	    [
             Resistor
@@ -11,7 +11,7 @@ start mesh
     )
     parallel (
 	    [
-            Battery
+            Ammeter
             Led
             Capacitor
 	    ],
