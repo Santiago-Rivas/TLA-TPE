@@ -201,6 +201,13 @@ Variable * IdentifierVariableGrammarAction(MeshItem * identifier, MeshItem * mes
     }
     variable->identifier = strdup(identifier->s);
     variable->component = meshItem->c;
+    int res = add_variable(state.map, variable->identifier, variable->component);
+    if(res == 0) {
+        LogError("Variable '%s' already exists.", variable->identifier);
+        return NULL;
+    }else{
+        LogDebug("Variable '%s' added to the map. Color: '%d', Type: '%d'\n", variable->identifier, variable->component->color, variable->component->type);
+    }
     return variable;
 }
 

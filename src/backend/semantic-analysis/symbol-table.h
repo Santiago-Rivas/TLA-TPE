@@ -14,7 +14,7 @@ typedef struct {
 // Hash table for variables
 KHASH_MAP_INIT_STR(comp, Comp);
 
-void add_variable(khash_t(comp) *map, const char *name, const Component * component);
+int add_variable(khash_t(comp) *map, const char *name, const Component * component);
 Comp* get_variable(khash_t(comp) *map, const char *name);
 void remove_variable(khash_t(comp) *map, const char *name);
 void cleanup_variables(khash_t(comp) *map);
