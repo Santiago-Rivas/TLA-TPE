@@ -36,11 +36,10 @@ int ConcatString(Buffer * buf, char * string){
 }
 
 int ConcatStringWithLength(Buffer * buf, char * string, int length){
-    LogDebug("Drawing %s", string);
-    LogDebug("Length: %d", buf->maxLen);
     if (!(buf->maxLen > buf->currentLen + length + 1)) {
-        LogDebug("Attempting ConcatStringWithLength Malloc");
-        int newLen = buf->maxLen + BUFFER_BLOCK;
+        LogDebug("Attempting ConcatStringWithLength realloc");
+        LogDebug("maxLen = %d, currentLen = %d, length = %d", buf->maxLen, buf->currentLen, length);
+        int newLen = buf->maxLen + BUFFER_BLOCK + length + 1;
         buf->str = realloc(buf->str, newLen);
         if (buf->str == NULL) {
             LogError("Buffer ConcatStringWithLength Realloc Failed");
@@ -48,8 +47,6 @@ int ConcatStringWithLength(Buffer * buf, char * string, int length){
         }
         buf->maxLen = newLen;
     }
-    LogDebug("Strings: %s", "hola");
-    LogDebug("Strings: %s", buf->str);
     strcpy(buf->str + buf->currentLen, string);
     buf->currentLen += length;
     return 0;

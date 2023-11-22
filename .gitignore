@@ -30,6 +30,7 @@ out
 *.pdf
 *.tex
 *.gz
+*.vx
 
 bison-3.8.2/*
 make-4.3/*

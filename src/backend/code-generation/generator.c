@@ -13,8 +13,9 @@ int Generator(char * fileName, char * output) {
                         \\documentclass{article}\
                         \\usepackage[utf8]{inputenc}\
                         \\usepackage{circuitikz}\
+                        \\usepackage[paperwidth=20in, paperheight=20in, margin=1in]{geometry}\
                         \\begin{document}\
-                        \\begin{circuitikz}""";
+                        \\begin{circuitikz}[line width=1.5pt]""";
 
     char * docClose = """\
                         \\end{circuitikz}\

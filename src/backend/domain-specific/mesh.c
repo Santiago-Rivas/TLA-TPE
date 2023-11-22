@@ -10,12 +10,12 @@ char * DrawComponentType(ComponentType componentType, char * message);
 char * DrawComponent(char * componentName, char * message);
 Point CreatePoint(unsigned int x, unsigned int y);
 
-int EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes);
-int EvaluateComponent(Pencil * pencil, Component * component);
-int EvaluateFunction(Pencil * pencil, FunctionNode * functionNode);
+Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes);
+Rectangle * EvaluateComponent(Pencil * pencil, Component * component);
+Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode);
 int PointToPointCable(Buffer * buffer, Point p1, Point p2);
 int PointToPointConnection(Buffer * buffer, Point p1, Point p2, Component * component);
-int PointToString(Point * point, char ** str);
+char * PointToString(Point * point);
 char * GetComponentMessage(Component * component);
 
 int EvaluateProgram(Program * program, char ** output){
@@ -32,19 +32,30 @@ int EvaluateProgram(Program * program, char ** output){
     pencil.buf = buffer;
     //LogDebug("Buffer Creation Success");
 
+    Rectangle * rectangle = EvaluateMeshes(&pencil, program->meshes);
+
+     Point upperRight = CreatePoint(rectangle->p2.x, rectangle->p1.y);
+     Point lowerRight = CreatePoint(upperRight.x, -4);
+     PointToPointCable(pencil.buf, upperRight, lowerRight);
+     PointToPointCable(pencil.buf, CreatePoint(0,-4), lowerRight);
+     PointToPointCable(pencil.buf, CreatePoint(0,-4), CreatePoint(0, 0));
+
+
+
     *output = buffer->str;
     return 0;
 }
 
-int EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {
+Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {
+    Rectangle * rect;
     while (meshes != NULL) {
         switch (meshes->itemType) {
             case MESH_COMPONENT:
-                EvaluateComponent(pencil, meshes->item.c);
+                rect = EvaluateComponent(pencil, meshes->item.c);
                 break;
             case MESH_FUNCTION:
                 pencil->level = meshes->item.f->level;
-                EvaluateFunction(pencil, meshes->item.f);
+                rect = EvaluateFunction(pencil, meshes->item.f);
                 if (!(meshes->item.f->level == 0)) {
                     meshes->item.f->level--;
                 }
@@ -56,17 +67,21 @@ int EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {
         }
         meshes = meshes->next;
     }
-    return 0;
+    return rect;
 }
 
-int EvaluateComponent(Pencil * pencil, Component * component) {
+Rectangle * EvaluateComponent(Pencil * pencil, Component * component) {
+    Rectangle * rect = malloc(sizeof(Rectangle));
+    rect->p1 = pencil->currentPoint;
     Point point2 = (Point) {pencil->currentPoint.x + 4, pencil->currentPoint.y};
     PointToPointConnection(pencil->buf, pencil->currentPoint, point2, component);
     pencil->currentPoint = point2;
-    return point2.x;
+    rect->p2 = point2;
+    return rect;
 }
 
-int EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
+Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
+    Point initial = pencil->currentPoint;
     Point point2 = (Point) {pencil->currentPoint.x, (pencil->currentPoint.y + 4) * pencil->level};
     PointToPointCable(pencil->buf, pencil->currentPoint, point2);
     pencil->currentPoint = point2;
@@ -75,21 +90,56 @@ int EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
     PointToPointCable(pencil->buf, pencil->currentPoint, point3);
     pencil->currentPoint = point3;
 
+
+    PointList * pointList = NULL;
+    Rectangle * totalRectangle = malloc(sizeof(Rectangle));
+
+    totalRectangle->p1 = pencil->currentPoint;
+    totalRectangle->p2 = pencil->currentPoint;
     while (functionNode != NULL) {
         Point aux = CreatePoint(pencil->currentPoint.x, (pencil->currentPoint.y + 4) * pencil->level);
 
-        EvaluateMeshes(pencil, functionNode->mesh);
+        Rectangle * newRectangle = EvaluateMeshes(pencil, functionNode->mesh);
+        pencil->currentPoint.x = initial.x;
+
+        PointList * pointNode = malloc(sizeof(PointList));
+        pointNode->nextPoint = pointList;
+        pointNode->point = newRectangle->p2;
+        pointList = pointNode;
+
         functionNode = functionNode->next;
+
+        if (functionNode != NULL) {
+
+            if (newRectangle->p1.y == newRectangle->p2.y) {
+                newRectangle->p2.y += 4;
+            }
+            if (totalRectangle->p2.x < newRectangle->p2.x) {
+                totalRectangle->p2.x = newRectangle->p2.x;
+            }
+            if (totalRectangle->p2.y < newRectangle->p2.y) {
+                totalRectangle->p2.y = newRectangle->p2.y;
+            }
+
+            LogDebug("destination");
+            Point destination = CreatePoint(pencil->currentPoint.x, newRectangle->p2.y);
+            PointToPointCable(pencil->buf, pencil->currentPoint, destination);
+            pencil->currentPoint = destination;
+        }
     }
 
-    Point point4 = (Point) {pencil->currentPoint.x + 4, pencil->currentPoint.y};
-    PointToPointCable(pencil->buf, pencil->currentPoint, point4);
-    pencil->currentPoint = point4;
+    PointList * pointNode = pointList;
+    while (pointNode != NULL) {
+        if (pointNode->point.x < totalRectangle->p2.x) {
+            Point newPoint = CreatePoint(totalRectangle->p2.x, pointNode->point.y);
+            PointToPointCable(pencil->buf, pointNode->point, newPoint);
+        }
+        pointNode = pointNode->nextPoint;
+    }
 
-
-    Point point5 = (Point) {point4.x, point2.y};
-    PointToPointCable(pencil->buf, pencil->currentPoint, point5);
-    pencil->currentPoint = point5;
+    Point newPoint = CreatePoint(totalRectangle->p2.x, totalRectangle->p1.y);
+    PointToPointCable(pencil->buf, totalRectangle->p2, newPoint);
+    pencil->currentPoint = newPoint;
 
     return 0;
 }
@@ -145,6 +195,7 @@ char * DrawComponentType(ComponentType componentType, char * message){
 }
 
 int PointToPointCable(Buffer * buffer, Point p1, Point p2) {
+    LogDebug("Creating cable from (%d,%d) to (%d,%d)", p1.x, p1.y, p2.x, p2.y);
     Component comp;
     comp.type = CABLE;
     comp.color = BLACK;
@@ -155,18 +206,16 @@ int PointToPointCable(Buffer * buffer, Point p1, Point p2) {
 int PointToPointConnection(Buffer * buffer, Point p1, Point p2, Component * component) {
     ConcatStringWithLength(buffer, "\n\\draw \n", 8);
 
-    char * point1Str;
-    int len1 = PointToString(&p1, &point1Str);
-    ConcatStringWithLength(buffer, point1Str, len1);
+    char * point1Str = PointToString(&p1);
+    ConcatString(buffer, point1Str);
 
     char * message = GetComponentMessage(component);
 
     char * battery1 = DrawComponentType(component->type, message);
     ConcatString(buffer, battery1);
 
-    char * point2Str;
-    int len2 = PointToString(&p2, &point2Str);
-    ConcatStringWithLength(buffer, point2Str, len2);
+    char * point2Str = PointToString(&p2);
+    ConcatString(buffer, point2Str);
 
     ConcatStringWithLength(buffer, ";\n", 2);
 
@@ -191,51 +240,18 @@ int CheckPointRealloc(char ** str, int i) {
 }
 
 // Fix implementation
-int PointToString(Point * point, char ** str) {
-    //LogDebug("Start of PointToString");
-    *str = malloc(sizeof(char) * 10);
-    if (*str == NULL) {
-        return 0;
+char * PointToString(Point * point) {
+    char *str = malloc(20);
+    if (str == NULL) {
+        return NULL;
     }
-    int i = 0;
-    unsigned int x = point->x;
-    unsigned int y = point->y;
-
-    (*str)[i++] = '(';
-    do {
-        //LogDebug("x value : %d", x);
-        if (!CheckPointRealloc(str, i)){
-            return 0;
-        }
-        (*str)[i++] = '0' + (x % 10);
-        x /= 10;
-    } while (x > 0);
-    if (!CheckPointRealloc(str, i)){
-        return 0;
-    }
-    //LogDebug("PointToString coma");
-    (*str)[i++] = ',';
-    do {
-        //LogDebug("y value : %d", y);
-        if (!CheckPointRealloc(str, i)){
-            return 0;
-        }
-        (*str)[i++] = '0' + (y % 10);
-        y /= 10;
-    } while (y > 0);
-
-    if (!CheckPointRealloc(str, i)){
-        return 0;
-    }
-
-    (*str)[i++] = ')';
-    (*str)[i] = '\0';
-    return i;
+    sprintf(str, " (%d,%d) ", point->x, point->y); 
+    return str;
 }
 
 char * GetComponentMessage(Component * component){
     // TODO: Parse Param List
-    return "Message";
+    return "";
 }
 
 Point CreatePoint(unsigned int x, unsigned int y) {

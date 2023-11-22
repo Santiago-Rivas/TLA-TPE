@@ -1,7 +1,9 @@
 #ifndef BUFFER_HEADER
 #define BUFFER_HEADER
 
-#define BUFFER_BLOCK 100
+#define BUFFER_BLOCK 1000
+
+typedef struct PointList PointList;
 
 typedef struct Buffer {
     char * str;
@@ -20,6 +22,15 @@ typedef struct {
     Buffer * buf;
 } Pencil;
 
+typedef struct {
+    Point p1;
+    Point p2;
+} Rectangle;
+
+typedef struct PointList {
+    Point point;
+    PointList * nextPoint;
+} PointList;
 
 Buffer * BufferInit();
 void BufferFree(Buffer * buf);
