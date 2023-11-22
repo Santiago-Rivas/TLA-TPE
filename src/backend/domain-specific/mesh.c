@@ -33,14 +33,15 @@ int EvaluateProgram(Program * program, char ** output){
     //LogDebug("Buffer Creation Success");
 
     Rectangle * rectangle = EvaluateMeshes(&pencil, program->meshes);
+    if (rectangle == NULL) {
+        return 1;
+    }
 
-     Point upperRight = CreatePoint(rectangle->p2.x, rectangle->p1.y);
-     Point lowerRight = CreatePoint(upperRight.x, -4);
-     PointToPointCable(pencil.buf, upperRight, lowerRight);
-     PointToPointCable(pencil.buf, CreatePoint(0,-4), lowerRight);
-     PointToPointCable(pencil.buf, CreatePoint(0,-4), CreatePoint(0, 0));
-
-
+    Point upperRight = CreatePoint(rectangle->p2.x, rectangle->p1.y);
+    Point lowerRight = CreatePoint(upperRight.x, -4);
+    PointToPointCable(pencil.buf, upperRight, lowerRight);
+    PointToPointCable(pencil.buf, CreatePoint(0,-4), lowerRight);
+    PointToPointCable(pencil.buf, CreatePoint(0,-4), CreatePoint(0, 0));
 
     *output = buffer->str;
     return 0;
@@ -52,10 +53,16 @@ Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {
         switch (meshes->itemType) {
             case MESH_COMPONENT:
                 rect = EvaluateComponent(pencil, meshes->item.c);
+                if (rect == NULL) {
+                    LogDebug("EvaluateComponent returned NULL");
+                }
                 break;
             case MESH_FUNCTION:
                 pencil->level = meshes->item.f->level;
                 rect = EvaluateFunction(pencil, meshes->item.f);
+                if (rect == NULL) {
+                    LogDebug("EvaluateFunction returned NULL");
+                }
                 if (!(meshes->item.f->level == 0)) {
                     meshes->item.f->level--;
                 }
@@ -101,6 +108,7 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
 
         Rectangle * newRectangle = EvaluateMeshes(pencil, functionNode->mesh);
         pencil->currentPoint.x = initial.x;
+        pencil->currentPoint.y = newRectangle->p2.y + 4;
 
         PointList * pointNode = malloc(sizeof(PointList));
         pointNode->nextPoint = pointList;
@@ -141,7 +149,7 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
     PointToPointCable(pencil->buf, totalRectangle->p2, newPoint);
     pencil->currentPoint = newPoint;
 
-    return 0;
+    return totalRectangle;
 }
 
 int EvaluateComponents() {
