@@ -1,7 +1,7 @@
 start mesh
     parallel(
         [
-            Transistor
+            Battery
             Led
         ]
     )

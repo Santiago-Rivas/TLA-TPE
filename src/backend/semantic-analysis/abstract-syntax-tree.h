@@ -61,8 +61,7 @@ typedef enum {
     VOLTMETER,
     SWITCH,
     CAPACITOR,
-    LED,
-    TRANSISTOR
+    LED
 } ComponentType;
 
 typedef enum {

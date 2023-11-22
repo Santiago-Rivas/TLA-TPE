@@ -9,7 +9,7 @@ start mesh
             Resistor
         ]
     )
-    Transistor
+    Voltmeter
     parallel (
         [
             Inductor

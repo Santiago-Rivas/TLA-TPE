@@ -9,6 +9,5 @@ start mesh
     Switch
     Capacitor
     Led
-    Transistor
 end mesh
 

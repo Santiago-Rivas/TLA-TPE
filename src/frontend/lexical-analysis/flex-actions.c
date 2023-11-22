@@ -62,10 +62,8 @@ token ComponentOperatorPatternAction(const char *lexeme, const int length) {
         type = CAPACITOR;
     } else if (strcmp(lexemeCopy, "Led") == 0) {
         type = LED;
-    } else if (strcmp(lexemeCopy, "Transistor") == 0) {
-        type = TRANSISTOR;
     } else {
-        type = LED;
+        type = CABLE;
     }
     yylval.componentType = type;
     return COMPONENT;

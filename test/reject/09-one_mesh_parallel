@@ -1,7 +1,6 @@
 start mesh
     parallel(
         [
-            Transistor
             Led
             led
         ]

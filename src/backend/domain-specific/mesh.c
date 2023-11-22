@@ -192,9 +192,6 @@ char * DrawComponentType(ComponentType componentType, char * message){
         case LED:
             str = DrawComponent("led", message);
             break;
-        case TRANSISTOR:
-            str = DrawComponent("short", message); // TODO: Remove
-            break;
         default:
             str = DrawComponent("short", message);
             break;
