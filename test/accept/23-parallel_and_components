@@ -9,7 +9,6 @@ start mesh
             Battery
         ]
     )
-    Transistor
     parallel (
         [
             Inductor

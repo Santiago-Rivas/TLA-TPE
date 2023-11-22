@@ -62,17 +62,15 @@ token ComponentOperatorPatternAction(const char *lexeme, const int length) {
         type = CAPACITOR;
     } else if (strcmp(lexemeCopy, "Led") == 0) {
         type = LED;
-    } else if (strcmp(lexemeCopy, "Transistor") == 0) {
-        type = TRANSISTOR;
     } else {
-        type = LED;
+        type = CABLE;
     }
     yylval.componentType = type;
     return COMPONENT;
 }
 
-token CommaPatternaction() {
-    LogDebug("[Flex] CommaPatternaction: ','.");
+token CommaPatternAction() {
+    LogDebug("[Flex] CommaPatternAction: ','.");
     yylval.token = COMMA;
     return COMMA;
 }
@@ -132,7 +130,7 @@ token RealNumberPatternAction(const char *lexeme, const int length) {
 }
 
 token AssignOperatorPatternAction() {
-    LogDebug("[Flex] AssignOpperatorPatternAction: '='.");
+    LogDebug("[Flex] AssignOperatorPatternAction: '='.");
     return ASSIGN;
 }
 

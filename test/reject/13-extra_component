@@ -10,4 +10,4 @@ start mesh
         ]
     )
 end mesh
-    Transistor
+    Ammeter

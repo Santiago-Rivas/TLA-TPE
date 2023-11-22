@@ -16,7 +16,7 @@ typedef struct Expression Expression;
 /**
 * En caso de que un no-terminal ("Factor" en este caso), posea más de una
 * regla de producción asociada, se crea además de la estructura un enumerado
-* que identitifque cada reducción posible (cada regla de producción). Luego,
+* que identifique cada reducción posible (cada regla de producción). Luego,
 * se agrega una instancia de este enumerado dentro del nodo del no-terminal.
 *
 * De este modo, al recorrer el AST, es posible determinar qué nodos hijos
@@ -61,8 +61,7 @@ typedef enum {
     VOLTMETER,
     SWITCH,
     CAPACITOR,
-    LED,
-    TRANSISTOR
+    LED
 } ComponentType;
 
 typedef enum {

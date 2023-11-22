@@ -212,9 +212,6 @@ char * DrawComponentType(ComponentType componentType, char * message){
         case LED:
             str = DrawComponent("led", message);
             break;
-        case TRANSISTOR:
-            str = DrawComponent("short", message); // TODO: Remov
-            break;
         default:
             str = DrawComponent("short", message);
             break;
@@ -250,7 +247,7 @@ int PointToPointConnection(Buffer * buffer, Point p1, Point p2, Component * comp
     free(battery1);
     free(point1Str);
     free(point2Str);
-    // TODO: free(message) when implmemented correctly
+    // TODO: free(message) when implemented correctly
 
     return 1;
 }

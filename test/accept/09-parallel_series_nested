@@ -9,7 +9,6 @@ start mesh
             Resistor
         ]
     )
-    Transistor
     Capacitor
     Led
 end mesh

@@ -29,12 +29,12 @@ const int main(const int argumentCount, const char ** arguments) {
 			// La variable "succeed" es la que setea Bison al identificar el símbolo
 			// inicial de la gramática satisfactoriamente.
 			if (state.succeed) {
-				LogInfo("La compilacion fue exitosa.");
+				LogInfo("La compilación fue exitosa.");
                 EvaluateProgram(state.program, &state.output);
 				Generator("output.tex", state.output);
 			}
 			else {
-				LogError("Se produjo un error en la aplicacion.");
+				LogError("Se produjo un error en la aplicación.");
 				return -1;
 			}
 			break;
@@ -45,7 +45,7 @@ const int main(const int argumentCount, const char ** arguments) {
 			LogError("Bison finalizo abruptamente debido a que ya no hay memoria disponible.");
 			break;
 		default:
-			LogError("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).", result);
+			LogError("Error desconocido mientras se ejecutaba el analizador Bison (código %d).", result);
 	}
 	LogInfo("Fin.");
 	cleanup_variables(state.map);

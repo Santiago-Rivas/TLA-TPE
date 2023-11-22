@@ -25,7 +25,7 @@ void EndCommentPatternAction();
 
 // Patrones terminales del lenguaje diseñado.
 token ComponentOperatorPatternAction(const char* lexeme, const int length);
-token CommaPatternaction();
+token CommaPatternAction();
 token OpenBracketsPatternAction();
 token CloseBracketsPatternAction();
 token OpenSquareBracketsPatternAction();
