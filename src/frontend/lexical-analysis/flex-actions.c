@@ -69,8 +69,8 @@ token ComponentOperatorPatternAction(const char *lexeme, const int length) {
     return COMPONENT;
 }
 
-token CommaPatternaction() {
-    LogDebug("[Flex] CommaPatternaction: ','.");
+token CommaPatternAction() {
+    LogDebug("[Flex] CommaPatternAction: ','.");
     yylval.token = COMMA;
     return COMMA;
 }
@@ -130,7 +130,7 @@ token RealNumberPatternAction(const char *lexeme, const int length) {
 }
 
 token AssignOperatorPatternAction() {
-    LogDebug("[Flex] AssignOpperatorPatternAction: '='.");
+    LogDebug("[Flex] AssignOperatorPatternAction: '='.");
     return ASSIGN;
 }
 

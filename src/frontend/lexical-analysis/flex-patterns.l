@@ -42,7 +42,7 @@ color           red|green|blue
 "["                                         { return OpenSquareBracketsPatternAction(yytext); }
 "]"                                         { return CloseSquareBracketsPatternAction(yytext); }
 
-","                                         { return CommaPatternaction(yytext); }
+","                                         { return CommaPatternAction(yytext); }
 
 start                                       { return StartPatternAction(yytext, yyleng); }
 mesh                                        { return MeshPatternAction(yytext, yyleng); }

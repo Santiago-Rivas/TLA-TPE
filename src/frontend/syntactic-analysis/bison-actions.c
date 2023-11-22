@@ -13,7 +13,7 @@
  * Esta función se ejecuta cada vez que se emite un error de sintaxis.
  */
 void yyerror(const char *string) {
-    LogErrorRaw("[ERROR] Mensaje: '%s', debido a '", string);
+    LogErrorRaw("[ERROR] Message: '%s', because of '", string);
     for (int i = 0; i < yyleng; ++i) {
         switch (yytext[i]) {
             case '\n':
@@ -22,7 +22,7 @@ void yyerror(const char *string) {
                 LogErrorRaw("%c", yytext[i]);
         }
     }
-    LogErrorRaw("' (length = %d, linea %d).\n\n", yyleng, yylineno);
+    LogErrorRaw("' (length = %d, line %d).\n\n", yyleng, yylineno);
 }
 
 /**
