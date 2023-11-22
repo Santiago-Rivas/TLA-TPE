@@ -17,8 +17,9 @@ typedef struct {
 } Point;
 
 typedef struct {
-    Point currentPoint;
     unsigned int level;
+    unsigned int outerSeries;
+    Point currentPoint;
     Buffer * buf;
 } Pencil;
 

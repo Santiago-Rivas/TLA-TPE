@@ -13,7 +13,7 @@ int Generator(char * fileName, char * output) {
                         \\documentclass{article}\
                         \\usepackage[utf8]{inputenc}\
                         \\usepackage{circuitikz}\
-                        \\usepackage[paperwidth=20in, paperheight=20in, margin=1in]{geometry}\
+                        \\usepackage[paperwidth=30in, paperheight=20in, margin=1in]{geometry}\
                         \\begin{document}\
                         \\begin{circuitikz}""";
 
