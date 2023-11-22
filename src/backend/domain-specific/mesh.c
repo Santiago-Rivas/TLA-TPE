@@ -274,9 +274,53 @@ char * PointToString(Point * point) {
     return str;
 }
 
+void PrintValue(Buffer * buffer, Value * value) {
+}
+
 char * GetComponentMessage(Component * component){
-    // TODO: Parse Param List
-    return "";
+    char str[MAX_STR];
+    Buffer * buffer = BufferInit();
+
+    if (component->paramList == NULL) {
+        return "";
+    }
+    if (component->paramList->type == PARAM_PAIR_NODE) {
+        PairNode * pairNode = component->paramList->params.p;
+
+        while (pairNode != NULL) {
+            if (pairNode->pair->leftType == VALUE_INTEGER){
+                sprintf(str, "%d", pairNode->pair->left.i);
+                ConcatString(buffer, str);
+            } else if (pairNode->pair->leftType == VALUE_FLOAT) {
+                sprintf(str, "%f", pairNode->pair->left.f);
+                ConcatString(buffer, str);
+            } else {
+                if (pairNode->pair->left.s != NULL) {
+                    ConcatString(buffer, pairNode->pair->left.s);
+                }
+            }
+            if (pairNode->pair->right != NULL) {
+                ConcatStringWithLength(buffer, pairNode->pair->right + 1, strlen(pairNode->pair->right + 1) - 1);
+                ConcatStringWithLength(buffer, "\\ ", 2);
+            }
+            pairNode = pairNode->next;
+        }
+    } else {
+        Constant * constant = component->paramList->params.c;
+            if (constant->type == VALUE_INTEGER){
+                sprintf(str, "%d", constant->value.i);
+                ConcatString(buffer, str);
+            } else if (constant->type == VALUE_FLOAT) {
+                LogDebug("FLOAT: %f", constant->value.f);
+                sprintf(str, "%.*g", constant->value.f);
+                ConcatString(buffer, str);
+            } else {
+                if (constant->value.s != NULL) {
+                    ConcatStringWithLength(buffer, constant->value.s + 1, strlen(constant->value.s + 1) - 1);
+                }
+            }
+    }
+    return buffer->str;
 }
 
 Point CreatePoint(unsigned int x, unsigned int y) {

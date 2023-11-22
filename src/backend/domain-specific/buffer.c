@@ -47,9 +47,9 @@ int ConcatStringWithLength(Buffer * buf, char * string, int length){
         }
         buf->maxLen = newLen;
     }
-    strcpy(buf->str + buf->currentLen, string);
+    //strcpy(buf->str + buf->currentLen, string);
+    strncat(buf->str, string, length);
     buf->currentLen += length;
     return 0;
 }
-
 

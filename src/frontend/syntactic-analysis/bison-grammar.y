@@ -143,6 +143,7 @@ pair: OPEN_BRACKET INTEGER COMMA STRING CLOSE_BRACKET                           
 
 constant: INTEGER                                                                   { $$ = ConstantGrammarAction($1, VALUE_INTEGER); }
     | REAL                                                                          { $$ = ConstantGrammarAction($1, VALUE_FLOAT); }
+    | STRING                                                                        { $$ = ConstantGrammarAction($1, VALUE_STRING); }
     ;
 
 variables: variable NEWLINE                                                         { $$ = VariablesGrammarAction($1); }

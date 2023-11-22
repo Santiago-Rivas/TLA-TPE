@@ -73,7 +73,7 @@ typedef enum {
 typedef union {
     int i;
     char * s;
-    float f;
+    double f;
 } Value;
 
 typedef struct {

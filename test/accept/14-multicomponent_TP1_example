@@ -4,7 +4,7 @@ start mesh
     battery1
     parallel(
         [
-            Ammeter({2, "mA"})
+            Ammeter("A")
             my_light
             red battery1
         ],

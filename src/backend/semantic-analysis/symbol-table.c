@@ -10,6 +10,7 @@ int add_variable(khash_t(comp) *map, const char *name, const Component * compone
         var.component = malloc(sizeof(Component));
         var.component->type = component->type;
         var.component->color = component->color;
+        var.component->paramList = component->paramList;
         kh_value(map, iter) = var;
         printf("Variable '%s' added to the map. Color: '%d', Type: '%d'\n", name, component->color, component->type);
         return 1;
