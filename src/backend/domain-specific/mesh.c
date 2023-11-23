@@ -51,7 +51,7 @@ int EvaluateProgram(Program * program, char ** output){
 }
 
 Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {
-    Rectangle * rect;
+    Rectangle * rect = NULL;
     int lastWasParallel = 0;
     while (meshes != NULL) {
         if (meshes->itemType == MESH_COMPONENT) {
@@ -86,6 +86,9 @@ Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {
 
 Rectangle * EvaluateComponent(Pencil * pencil, Component * component) {
     Rectangle * rect = malloc(sizeof(Rectangle));
+    if (rect == NULL) {
+        return NULL;
+    }
     rect->p1 = pencil->currentPoint;
     Point point2 = (Point) {pencil->currentPoint.x + 4, pencil->currentPoint.y};
     PointToPointConnection(pencil->buf, pencil->currentPoint, point2, component);
@@ -114,6 +117,9 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
     PointList * pointList = NULL;
     Rectangle * totalRectangle = malloc(sizeof(Rectangle));
 
+    if (totalRectangle == NULL) {
+        return NULL;
+    }
     totalRectangle->p1 = pencil->currentPoint;
     totalRectangle->p2 = pencil->currentPoint;
     while (functionNode != NULL) {
@@ -126,6 +132,9 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
         pencil->currentPoint.x = initial.x;
 
         PointList * pointNode = malloc(sizeof(PointList));
+        if (pointNode == NULL) {
+            return NULL;
+        }
         pointNode->nextPoint = pointList;
         pointNode->point = newRectangle->p2;
         pointList = pointNode;
@@ -190,6 +199,11 @@ int EvaluateComponents() {
 char * DrawComponent(char * componentName, char * message, Color color) {
     LogDebug("DrawComponent %s", componentName);
     char * str = malloc(strlen(componentName) + strlen(message) + 30);
+    if (str == NULL) {
+        LogDebug("Memory allocation failed in DrawComponent");
+        return NULL; // or handle the error in an appropriate way
+    }
+
     char * colorString;
     if (color == RED) {
         colorString = "red";
@@ -279,10 +293,12 @@ int CheckPointRealloc(char ** str, int i) {
     //LogDebug("Check Point Realloc");
     if ((i % 10) == 0) {
         //LogDebug("Entered Point To String Realloc");
-        *str = realloc(*str, i + (sizeof(char) * 10));
-        if (*str == NULL) {
+        char *temp = realloc(*str, (i + 10) * sizeof(char));
+        if (temp == NULL) {
+            // Handle realloc failure, e.g., log an error message or return an error code
             return 0;
         }
+        *str = temp;
     }
     return 1;
 }
@@ -335,7 +351,7 @@ char * GetComponentMessage(Component * component){
             ConcatString(buffer, str);
         } else if (constant->type == VALUE_FLOAT) {
             LogDebug("FLOAT: %f", constant->value.f);
-            sprintf(str, "%.*g", constant->value.f);
+            sprintf(str, "%.*g",10 ,constant->value.f);
             ConcatString(buffer, str);
         } else {
             if (constant->value.s != NULL) {

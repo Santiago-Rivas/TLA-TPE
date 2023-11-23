@@ -99,7 +99,7 @@
 
 program: INITIATE MESH NEWLINE meshes END MESH                                        { $$ = ProgramGrammarAction($4); }
     | variables INITIATE MESH NEWLINE meshes END MESH                                 { $$ = ProgramGrammarAction($5); }
-    | program NEWLINE                                                               { $$ = $1; }
+    | program NEWLINE                                                                 { $$ = $1; }
     | NEWLINE INITIATE MESH NEWLINE meshes END MESH                                   { $$ = ProgramGrammarAction($5); }
     ;
 
