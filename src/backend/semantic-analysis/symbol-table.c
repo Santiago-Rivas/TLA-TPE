@@ -1,7 +1,10 @@
 #include "symbol-table.h"
+#include "khash.h"
 
 // Function to add a variable to the map
 int add_variable(khash_t(comp) *map, const char *name, const Component * component) {
+    printf("ADD: %s\n", name);
+    printf("%p\n", map);
     int ret;
     khiter_t iter = kh_put(comp, map, name, &ret);
     if (ret != 0) {
@@ -13,12 +16,10 @@ int add_variable(khash_t(comp) *map, const char *name, const Component * compone
         var.component->paramList = component->paramList;
         kh_value(map, iter) = var;
         printf("Variable '%s' added to the map. Color: '%d', Type: '%d'\n", name, component->color, component->type);
-        return 1;
+        printf("Variable '%s' added to the map. Color: '%d', Type: '%d'\n", var.identifier, var.component->color, var.component->type);
         // printf("Variable '%s' added to the map. wa\n", name); 
-    } else {
-        printf("Variable '%s' already exists.\n", name);
-        return 0;
     }
+    return ret;
 }
 
 // Function to retrieve a variable from the map

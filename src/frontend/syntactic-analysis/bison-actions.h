@@ -13,7 +13,9 @@
  */
 
 // Programa.
- Program * ProgramGrammarAction(MeshItemNode * meshes);
+Program * ProgramGrammarAction(MeshItemNode * meshes);
+
+Program * ProgramVariableGrammarAction(int variableCreationReturn, MeshItemNode * meshes);
 
 //Function
 FunctionNode * FunctionParamsGrammarAction(FunctionNode * first, FunctionNode * second);
@@ -41,7 +43,7 @@ MeshItemNode * MeshesGrammarAction(MeshItemNode * first, MeshItemNode * second);
 
 ComponentParams * PairsGrammarAction(Pair * first, ComponentParams * second);
 
-int VariablesGrammarAction(Variable * variable);
+int VariablesGrammarAction(Variable * variable, int pastRet);
 
 Variable * IdentifierVariableGrammarAction(MeshItem * identifier, MeshItem * meshItem);
 

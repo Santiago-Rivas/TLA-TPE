@@ -109,8 +109,6 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
     pencil->currentPoint = point3;
 
     int initialLevel = pencil->level;
-    // pencil->level = functionNode->level;
-    LogDebug("Pencil Level Eval = %d", pencil->level);
 
     Point initial = pencil->currentPoint;
 

@@ -146,7 +146,6 @@ token IdentifierPatterAction(const char *lexeme, const int length) {
 token StartPatternAction(const char *lexeme, const int length) {
     char *lexemeCopy = copyLexeme(lexeme, length);
     LogDebug("[Flex] StartPatternAction: 'start'.");
-    free(lexemeCopy);
     yylval.initiate = INITIATE;
     return INITIATE;
 }

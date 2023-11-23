@@ -98,7 +98,7 @@
 %%
 
 program: INITIATE MESH NEWLINE meshes END MESH                                        { $$ = ProgramGrammarAction($4); }
-    | variables INITIATE MESH NEWLINE meshes END MESH                                 { $$ = ProgramGrammarAction($5); }
+    | variables INITIATE MESH NEWLINE meshes END MESH                                 { $$ = ProgramVariableGrammarAction($1, $5); }
     | program NEWLINE                                                                 { $$ = $1; }
     | NEWLINE INITIATE MESH NEWLINE meshes END MESH                                   { $$ = ProgramGrammarAction($5); }
     ;
@@ -146,8 +146,8 @@ constant: INTEGER                                                               
     | STRING                                                                        { $$ = ConstantGrammarAction($1, VALUE_STRING); }
     ;
 
-variables: variable NEWLINE                                                         { $$ = VariablesGrammarAction($1); }
-    | variable NEWLINE variables                                                    { $$ = VariablesGrammarAction($1); }
+variables: variable NEWLINE                                                         { $$ = VariablesGrammarAction($1, 1); }
+    | variable NEWLINE variables                                                    { $$ = VariablesGrammarAction($1, $3); }
     ;
 
 variable: IDENTIFIER ASSIGN component                                               { $$ = IdentifierVariableGrammarAction($1, $3); }

@@ -34,6 +34,7 @@ void yyerror(const char *string) {
 Program *ProgramGrammarAction(MeshItemNode *meshes) {
     Program *program = calloc(1, sizeof(Program));
     if (program == NULL) {
+        state.succeed = false;
         return NULL;
     }
     program->meshes = meshes;
@@ -44,6 +45,17 @@ Program *ProgramGrammarAction(MeshItemNode *meshes) {
     state.succeed = true;
 
     return program;
+}
+
+Program * ProgramVariableGrammarAction(int variableCreationReturn, MeshItemNode * meshes) {
+    LogDebug("Variable Exists check %d", variableCreationReturn);
+    if (variableCreationReturn == 0) {
+        LogDebug("Variable Exists");
+        state.succeed = false;
+        state.result = 3;
+        return NULL;
+    }
+    return ProgramGrammarAction(meshes);
 }
 
 // Function
@@ -196,11 +208,12 @@ ComponentParams * PairsGrammarAction(Pair *first, ComponentParams * second) {
     return componentParams;
 }
 
-int VariablesGrammarAction(Variable * variable) {
-    // TODO: Return response
-    add_variable(state.map, variable->identifier, variable->component);
-    // TODO: Update variable
-    return 0; 
+int VariablesGrammarAction(Variable * variable, int pastRet) {
+    if (variable == NULL || pastRet == 0) {
+        LogDebug("Variable Already Exists");
+        return 0;
+    }
+    return 1;
 }
 
 Variable * IdentifierVariableGrammarAction(MeshItem * identifier, MeshItem * meshItem) {
@@ -213,8 +226,10 @@ Variable * IdentifierVariableGrammarAction(MeshItem * identifier, MeshItem * mes
     int res = add_variable(state.map, variable->identifier, variable->component);
     if(res == 0) {
         LogError("Variable '%s' already exists.", variable->identifier);
+        state.succeed = false;
+        state.result = 3;
         return NULL;
-    }else{
+    } else{
         LogDebug("Variable '%s' added to the map. Color: '%d', Type: '%d'\n", variable->identifier, variable->component->color, variable->component->type);
     }
     return variable;

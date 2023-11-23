@@ -34,14 +34,14 @@ const int main(const int argumentCount, const char ** arguments) {
                 if (rectangle == NULL) {
                     state.succeed = 0;
 				    LogError("Se produjo un error en la aplicación.");
-                    return -1;
+                    return 1;
                 }
                 LogDebug("p1x = %d, p1y = %d, p2x = %d, p2y = %d", rectangle->p1.x, rectangle->p1.y, rectangle->p2.x, rectangle->p2.y);
 				Generator("output.tex", state.output, rectangle->p2.x - rectangle->p1.x + 12, rectangle->p2.y - rectangle->p1.y + 12);
 			}
 			else {
 				LogError("Se produjo un error en la aplicación.");
-				return -1;
+				return 1;
 			}
 			break;
 		case 1:
@@ -49,6 +49,9 @@ const int main(const int argumentCount, const char ** arguments) {
 			break;
 		case 2:
 			LogError("Bison finalizo abruptamente debido a que ya no hay memoria disponible.");
+			break;
+		case 3:
+			LogError("Error de redefinición de variable.");
 			break;
 		default:
 			LogError("Error desconocido mientras se ejecutaba el analizador Bison (código %d).", result);
