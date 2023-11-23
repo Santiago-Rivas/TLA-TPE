@@ -1,5 +1,4 @@
 #include "mesh.h"
-#include "buffer.h"
 #include "../support/logger.h"
 
 #include <stdlib.h>
@@ -18,7 +17,7 @@ int PointToPointConnection(Buffer * buffer, Point p1, Point p2, Component * comp
 char * PointToString(Point * point);
 char * GetComponentMessage(Component * component);
 
-int EvaluateProgram(Program * program, char ** output){
+Rectangle * EvaluateProgram(Program * program, char ** output){
     //LogDebug("Entered EvaluateProgram");
     Buffer * buffer = BufferInit();
     if (buffer == NULL) {
@@ -26,18 +25,16 @@ int EvaluateProgram(Program * program, char ** output){
         return 0;
     }
 
-// Initialize Pencil
-    Pencil pencil = {0}; // This sets all members of pencil to zero
+    Pencil pencil = {0};
 
     pencil.currentPoint = (Point) {0,0};
     pencil.level = 0;
     pencil.outerSeries = 0;
     pencil.buf = buffer;
-    //LogDebug("Buffer Creation Success");
 
     Rectangle * rectangle = EvaluateMeshes(&pencil, program->meshes);
     if (rectangle == NULL) {
-        return 1;
+        return NULL;
     }
 
     if (pencil.outerSeries != 0) {
@@ -46,10 +43,12 @@ int EvaluateProgram(Program * program, char ** output){
         PointToPointCable(pencil.buf, upperRight, lowerRight);
         PointToPointCable(pencil.buf, CreatePoint(0,-4), lowerRight);
         PointToPointCable(pencil.buf, CreatePoint(0,-4), CreatePoint(0, 0));
+        rectangle->p1.x = 0;
+        rectangle->p1.y -= 4;
     }
 
     *output = buffer->str;
-    return 0;
+    return rectangle;
 }
 
 Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {

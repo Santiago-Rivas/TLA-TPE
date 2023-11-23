@@ -30,8 +30,14 @@ const int main(const int argumentCount, const char ** arguments) {
 			// inicial de la gramática satisfactoriamente.
 			if (state.succeed) {
 				LogInfo("La compilación fue exitosa.");
-                EvaluateProgram(state.program, &state.output);
-				Generator("output.tex", state.output);
+                Rectangle * rectangle = EvaluateProgram(state.program, &state.output);
+                if (rectangle == NULL) {
+                    state.succeed = 0;
+				    LogError("Se produjo un error en la aplicación.");
+                    return -1;
+                }
+                LogDebug("p1x = %d, p1y = %d, p2x = %d, p2y = %d", rectangle->p1.x, rectangle->p1.y, rectangle->p2.x, rectangle->p2.y);
+				Generator("output.tex", state.output, rectangle->p2.x - rectangle->p1.x + 12, rectangle->p2.y - rectangle->p1.y + 12);
 			}
 			else {
 				LogError("Se produjo un error en la aplicación.");

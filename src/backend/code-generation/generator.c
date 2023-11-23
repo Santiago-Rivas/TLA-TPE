@@ -7,26 +7,25 @@
  * Implementación de "generator.h".
  */
 
-int Generator(char * fileName, char * output) {
+int Generator(char * fileName, char * output, int width, int height) {
     FILE *file = fopen(fileName, "w");
-    char * docSetup = """\
-                        \\documentclass{article}\
-                        \\usepackage[utf8]{inputenc}\
-                        \\usepackage{circuitikz}\
-                        \\usepackage[paperwidth=30in, paperheight=20in, margin=1in]{geometry}\
-                        \\begin{document}\
-                        \\begin{circuitikz}""";
+    char * docSetup = """\\documentclass{article}\n\
+\\usepackage[utf8]{inputenc}\n\
+\\usepackage{circuitikz}\n""";
 
-    char * docClose = """\
-                        \\end{circuitikz}\
-                        \\end{document}""";
+    char * docOpen = """\\begin{document}\n\
+\\begin{circuitikz}\n""";
+
+    char * docClose = """\\end{circuitikz}\n\
+\\end{document}\n""";
 
     if (file == NULL) {
         perror("Error opening the file");
         return 1;
     }
+    LogDebug("width = %d, height = %d", width, height);
 
-    fprintf(file, "%s\n%s\n%s", docSetup, output, docClose);
+    fprintf(file, "%s\n\\usepackage[paperwidth=%dcm, paperheight=%dcm, margin=1in]{geometry}\n%s\n%s\n%s", docSetup, width, height, docOpen, output, docClose);
 
     fclose(file);
 

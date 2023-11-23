@@ -2,11 +2,12 @@
 #define MESH_HEADER
 
 #include "../semantic-analysis/abstract-syntax-tree.h"
+#include "buffer.h"
 
 #define MAX_STR 256
 
 
-int EvaluateProgram(Program * program, char ** output);
+Rectangle * EvaluateProgram(Program * program, char ** output);
 
 #endif
 
