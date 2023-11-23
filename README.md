@@ -11,7 +11,7 @@ En Windows:
 Esto generará un archivo llamado "Compiler.sln" en la carpeta "bin" dentro del proyecto. 
 Abrir el archivo y compilarlo. Por ejemplo usando Visual Studio Code
 
-En Linux y WSL:
+En Linux:
 
 ```sh
 .\script\build.sh
