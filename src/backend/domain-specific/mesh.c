@@ -26,7 +26,9 @@ int EvaluateProgram(Program * program, char ** output){
         return 0;
     }
 
-    Pencil pencil;
+// Initialize Pencil
+    Pencil pencil = {0}; // This sets all members of pencil to zero
+
     pencil.currentPoint = (Point) {0,0};
     pencil.level = 0;
     pencil.outerSeries = 0;
@@ -259,7 +261,7 @@ char * DrawComponentType(Component * component){
 
 int PointToPointCable(Buffer * buffer, Point p1, Point p2) {
     LogDebug("Creating cable from (%d,%d) to (%d,%d)", p1.x, p1.y, p2.x, p2.y);
-    Component comp;
+    Component comp = {0};
     comp.type = CABLE;
     comp.color = BLACK;
     comp.paramList = NULL;
