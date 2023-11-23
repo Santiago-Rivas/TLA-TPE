@@ -50,7 +50,9 @@ Luego se deben ejecutar los siguientes comandos:
 
 En Windows:
 
->Importante: Para poder usar el comando "pdflatex" se debe instalar el programa MikTex, puede hacerlo desde el siguiente enlace: [https://miktex.org/download]()
+>Importante: Para poder usar el comando "pdflatex", se debe instalar el programa MikTex, que puedes descargar desde el siguiente enlace: https://miktex.org/download. 
+Asegúrate de seleccionar la opción "yes" al momento de indicarle que instale los paquetes necesarios mientras corre. 
+Después de instalarlo, abre el programa e instala las actualizaciones.
 
 ```sh
 ./script/start.bat <path_al_programa>
