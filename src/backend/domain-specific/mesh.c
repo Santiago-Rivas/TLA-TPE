@@ -9,7 +9,7 @@ char * DrawComponentType(Component * component);
 char * DrawComponent(char * componentName, char * message, Color color);
 Point CreatePoint(unsigned int x, unsigned int y);
 
-Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes);
+Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes, Rectangle * rectangle);
 Rectangle * EvaluateComponent(Pencil * pencil, Component * component);
 Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode);
 int PointToPointCable(Buffer * buffer, Point p1, Point p2);
@@ -18,7 +18,6 @@ char * PointToString(Point * point);
 char * GetComponentMessage(Component * component);
 
 Rectangle * EvaluateProgram(Program * program, char ** output){
-    //LogDebug("Entered EvaluateProgram");
     Buffer * buffer = BufferInit();
     if (buffer == NULL) {
         LogError("Evaluate Program Memory Allocation Failed");
@@ -32,7 +31,10 @@ Rectangle * EvaluateProgram(Program * program, char ** output){
     pencil.outerSeries = 0;
     pencil.buf = buffer;
 
-    Rectangle * rectangle = EvaluateMeshes(&pencil, program->meshes);
+    Rectangle * rectangle = malloc(sizeof(Rectangle));
+    rectangle->p1 = CreatePoint(0, 0);
+    rectangle->p2 = CreatePoint(0, 0);
+    EvaluateMeshes(&pencil, program->meshes, rectangle);
     if (rectangle == NULL) {
         return NULL;
     }
@@ -51,23 +53,24 @@ Rectangle * EvaluateProgram(Program * program, char ** output){
     return rectangle;
 }
 
-Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {
+Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes, Rectangle * rectangle) {
     Rectangle * rect = NULL;
     int lastWasParallel = 0;
     while (meshes != NULL) {
         if (meshes->itemType == MESH_COMPONENT) {
             if (pencil->level == 0) {
-                LogDebug("Pencil Leve = %d", pencil->level);
                 pencil->outerSeries++;
             }
             rect = EvaluateComponent(pencil, meshes->item.c);
             if (rect == NULL) {
                 LogDebug("EvaluateComponent returned NULL");
+                return NULL;
             }
             lastWasParallel = 0;
         } else if (meshes->itemType == MESH_FUNCTION) {
             if (lastWasParallel == 1) {
                 Point point = CreatePoint(pencil->currentPoint.x + 4, pencil->currentPoint.y);
+                // Add cable between parallels that are in series
                 PointToPointCable(pencil->buf, pencil->currentPoint, point);
                 pencil->currentPoint = point;
                 if (pencil->level == 0) {
@@ -77,11 +80,20 @@ Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {
             rect = EvaluateFunction(pencil, meshes->item.f);
             if (rect == NULL) {
                 LogDebug("EvaluateFunction returned NULL");
+                return NULL;
             }
             lastWasParallel = 1;
         }
+
+    if (rectangle->p2.x < rect->p2.x) {
+        rectangle->p2.x = rect->p2.x;
+    }
+    if (rectangle->p2.y <= rect->p2.y) {
+        rectangle->p2.y = rect->p2.y + 4;
+    }
         meshes = meshes->next;
     }
+
     return rect;
 }
 
@@ -122,11 +134,10 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
     totalRectangle->p1 = pencil->currentPoint;
     totalRectangle->p2 = pencil->currentPoint;
     while (functionNode != NULL) {
-        Point aux = CreatePoint(pencil->currentPoint.x, pencil->currentPoint.y + 4);
+        Point aux = CreatePoint(pencil->currentPoint.x, totalRectangle->p2.y);
 
         pencil->level += 1;
-        LogDebug("EvaluateFunction level: %d", pencil->level);
-        Rectangle * newRectangle = EvaluateMeshes(pencil, functionNode->mesh);
+        Rectangle * newRectangle = EvaluateMeshes(pencil, functionNode->mesh, totalRectangle);
         pencil->level -= 1;
         pencil->currentPoint.x = initial.x;
 
@@ -140,22 +151,12 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
 
         functionNode = functionNode->next;
 
-
-        if (totalRectangle->p2.x < newRectangle->p2.x) {
-            LogDebug("increased totalRectangle");
-            totalRectangle->p2.x = newRectangle->p2.x;
-        }
-        if (totalRectangle->p2.y < newRectangle->p2.y) {
-            LogDebug("increased totalRectangle");
-            totalRectangle->p2.y = newRectangle->p2.y;
-        }
-
         if (functionNode != NULL) {
             if (newRectangle->p1.y == newRectangle->p2.y) {
                 newRectangle->p2.y += 4;
             }
-            LogDebug("destination");
             Point destination = CreatePoint(pencil->currentPoint.x, newRectangle->p2.y);
+            // Left side vertical cable that joins parallels
             PointToPointCable(pencil->buf, pencil->currentPoint, destination);
             pencil->currentPoint = destination;
         }
@@ -163,8 +164,10 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
 
     PointList * pointNode = pointList;
     while (pointNode != NULL) {
-        if (pointNode->point.x < totalRectangle->p2.x) {
+        if (pointNode->point.x <= totalRectangle->p2.x) {
+            LogDebug("POINT NODE: %d, TR: %d", pointNode->point.x, totalRectangle->p2.x);
             Point newPoint = CreatePoint(totalRectangle->p2.x, pointNode->point.y);
+            // Cable that joins the ends of parallel sections that are shorter that the biggest one
             PointToPointCable(pencil->buf, pointNode->point, newPoint);
         }
         pointNode = pointNode->nextPoint;
@@ -172,6 +175,7 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
 
     Point point4 = CreatePoint(totalRectangle->p2.x, totalRectangle->p1.y);
     Point point5 = CreatePoint(point4.x, pencil->currentPoint.y);
+    // Right side vertical line that joins all parallels of the same level
     PointToPointCable(pencil->buf, point5, point4);
     pencil->currentPoint = point4;
 
@@ -289,9 +293,7 @@ int PointToPointConnection(Buffer * buffer, Point p1, Point p2, Component * comp
 }
 
 int CheckPointRealloc(char ** str, int i) {
-    //LogDebug("Check Point Realloc");
     if ((i % 10) == 0) {
-        //LogDebug("Entered Point To String Realloc");
         char *temp = realloc(*str, (i + 10) * sizeof(char));
         if (temp == NULL) {
             // Handle realloc failure, e.g., log an error message or return an error code
@@ -349,7 +351,6 @@ char * GetComponentMessage(Component * component){
             sprintf(str, "%d", constant->value.i);
             ConcatString(buffer, str);
         } else if (constant->type == VALUE_FLOAT) {
-            LogDebug("FLOAT: %f", constant->value.f);
             sprintf(str, "%.*g",10 ,constant->value.f);
             ConcatString(buffer, str);
         } else {
