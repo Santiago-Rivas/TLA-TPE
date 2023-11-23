@@ -18,7 +18,6 @@ char * PointToString(Point * point);
 char * GetComponentMessage(Component * component);
 
 Rectangle * EvaluateProgram(Program * program, char ** output){
-    //LogDebug("Entered EvaluateProgram");
     Buffer * buffer = BufferInit();
     if (buffer == NULL) {
         LogError("Evaluate Program Memory Allocation Failed");
@@ -57,7 +56,7 @@ Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {
     while (meshes != NULL) {
         if (meshes->itemType == MESH_COMPONENT) {
             if (pencil->level == 0) {
-                LogDebug("Pencil Leve = %d", pencil->level);
+                LogDebug("Pencil Level = %d", pencil->level);
                 pencil->outerSeries++;
             }
             rect = EvaluateComponent(pencil, meshes->item.c);
@@ -142,11 +141,9 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
 
 
         if (totalRectangle->p2.x < newRectangle->p2.x) {
-            LogDebug("increased totalRectangle");
             totalRectangle->p2.x = newRectangle->p2.x;
         }
         if (totalRectangle->p2.y < newRectangle->p2.y) {
-            LogDebug("increased totalRectangle");
             totalRectangle->p2.y = newRectangle->p2.y;
         }
 
@@ -154,7 +151,6 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
             if (newRectangle->p1.y == newRectangle->p2.y) {
                 newRectangle->p2.y += 4;
             }
-            LogDebug("destination");
             Point destination = CreatePoint(pencil->currentPoint.x, newRectangle->p2.y);
             PointToPointCable(pencil->buf, pencil->currentPoint, destination);
             pencil->currentPoint = destination;
@@ -200,7 +196,7 @@ char * DrawComponent(char * componentName, char * message, Color color) {
     char * str = malloc(strlen(componentName) + strlen(message) + 30);
     if (str == NULL) {
         LogDebug("Memory allocation failed in DrawComponent");
-        return NULL; // or handle the error in an appropriate way
+        return NULL;
     }
 
     char * colorString;
@@ -283,18 +279,14 @@ int PointToPointConnection(Buffer * buffer, Point p1, Point p2, Component * comp
     free(componentString);
     free(point1Str);
     free(point2Str);
-    // TODO: free(message) when implemented correctly
 
     return 1;
 }
 
 int CheckPointRealloc(char ** str, int i) {
-    //LogDebug("Check Point Realloc");
     if ((i % 10) == 0) {
-        //LogDebug("Entered Point To String Realloc");
         char *temp = realloc(*str, (i + 10) * sizeof(char));
         if (temp == NULL) {
-            // Handle realloc failure, e.g., log an error message or return an error code
             return 0;
         }
         *str = temp;
@@ -302,7 +294,6 @@ int CheckPointRealloc(char ** str, int i) {
     return 1;
 }
 
-// Fix implementation
 char * PointToString(Point * point) {
     char *str = malloc(20);
     if (str == NULL) {

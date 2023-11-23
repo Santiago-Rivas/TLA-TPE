@@ -3,6 +3,7 @@
 
 #include "khash.h"
 #include "abstract-syntax-tree.h"
+#include "../support/logger.h"
 #include <stdio.h>
 
 // Define var type
