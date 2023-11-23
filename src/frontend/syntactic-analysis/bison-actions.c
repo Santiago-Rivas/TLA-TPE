@@ -146,7 +146,16 @@ MeshItemNode *MeshGrammarAction(MeshItem * meshItem, MeshItemType type, Color co
         if (comp == NULL) {
             return NULL;
         }
-        meshItem->c = comp->component;
+        Component * component = malloc(sizeof(Component));
+        component->type = comp->component->type;
+        component->paramList = comp->component->paramList;
+        if (color == BLACK) {
+            component->color = comp->component->color;
+        } else {
+            component->color = color;
+        }
+
+        meshItem->c = component;
         meshItemNode->item = *meshItem;
         meshItemNode->itemType = MESH_COMPONENT;
     } else {

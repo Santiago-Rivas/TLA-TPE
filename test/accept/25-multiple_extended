@@ -1,12 +1,12 @@
 my_light = Led
-battery1 = Battery({2, "V"})
+battery1 = green Battery({2, "V"})
 battery2 = Battery({10, "V"})
 
 start mesh
     parallel (
         [
             battery1
-            Ammeter({2, "mA"})
+            green Ammeter({2, "mA"})
             my_light
             red battery1
             Battery

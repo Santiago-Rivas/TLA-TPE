@@ -1,0 +1,6 @@
+ammeter = Ammeter({-20, "A"})
+
+
+start mesh
+ammeter
+end mesh

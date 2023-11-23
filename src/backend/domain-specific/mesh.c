@@ -6,8 +6,8 @@
 #include <string.h>
 #include <stdio.h>
 
-char * DrawComponentType(ComponentType componentType, char * message);
-char * DrawComponent(char * componentName, char * message);
+char * DrawComponentType(Component * component);
+char * DrawComponent(char * componentName, char * message, Color color);
 Point CreatePoint(unsigned int x, unsigned int y);
 
 Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes);
@@ -52,21 +52,32 @@ int EvaluateProgram(Program * program, char ** output){
 
 Rectangle * EvaluateMeshes(Pencil * pencil, MeshItemNode * meshes) {
     Rectangle * rect;
+    int lastWasParallel = 0;
     while (meshes != NULL) {
         if (meshes->itemType == MESH_COMPONENT) {
             if (pencil->level == 0) {
-            LogDebug("Pencil Leve = %d", pencil->level);
+                LogDebug("Pencil Leve = %d", pencil->level);
                 pencil->outerSeries++;
             }
             rect = EvaluateComponent(pencil, meshes->item.c);
             if (rect == NULL) {
                 LogDebug("EvaluateComponent returned NULL");
             }
+            lastWasParallel = 0;
         } else if (meshes->itemType == MESH_FUNCTION) {
+            if (lastWasParallel == 1) {
+                Point point = CreatePoint(pencil->currentPoint.x + 4, pencil->currentPoint.y);
+                PointToPointCable(pencil->buf, pencil->currentPoint, point);
+                pencil->currentPoint = point;
+                if (pencil->level == 0) {
+                    pencil->outerSeries++;
+                }
+            }
             rect = EvaluateFunction(pencil, meshes->item.f);
             if (rect == NULL) {
                 LogDebug("EvaluateFunction returned NULL");
             }
+            lastWasParallel = 1;
         }
         meshes = meshes->next;
     }
@@ -87,14 +98,14 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
     Point point2;
     Point point3;
 
-        point2 = (Point) {pencil->currentPoint.x, pencil->currentPoint.y};
-        pencil->currentPoint = point2;
+    point2 = (Point) {pencil->currentPoint.x, pencil->currentPoint.y};
+    pencil->currentPoint = point2;
 
-        point3 = (Point) {point2.x, point2.y};
-        pencil->currentPoint = point3;
+    point3 = (Point) {point2.x, point2.y};
+    pencil->currentPoint = point3;
 
     int initialLevel = pencil->level;
-    pencil->level = functionNode->level;
+    // pencil->level = functionNode->level;
     LogDebug("Pencil Level Eval = %d", pencil->level);
 
     Point initial = pencil->currentPoint;
@@ -109,6 +120,7 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
         Point aux = CreatePoint(pencil->currentPoint.x, pencil->currentPoint.y + 4);
 
         pencil->level += 1;
+        LogDebug("EvaluateFunction level: %d", pencil->level);
         Rectangle * newRectangle = EvaluateMeshes(pencil, functionNode->mesh);
         pencil->level -= 1;
         pencil->currentPoint.x = initial.x;
@@ -159,12 +171,12 @@ Rectangle * EvaluateFunction(Pencil * pencil, FunctionNode * functionNode){
     Point point6;
     Point point7;
 
-        point6 = (Point) {point4.x, pencil->currentPoint.y};
-        pencil->currentPoint = point6;
+    point6 = (Point) {point4.x, pencil->currentPoint.y};
+    pencil->currentPoint = point6;
 
 
-        point7 = (Point) {point6.x, point2.y};
-        pencil->currentPoint = point7;
+    point7 = (Point) {point6.x, point2.y};
+    pencil->currentPoint = point7;
 
     totalRectangle->p2.x = point7.x;
 
@@ -175,45 +187,57 @@ int EvaluateComponents() {
     return 0;
 }
 
-char * DrawComponent(char * componentName, char * message) {
+char * DrawComponent(char * componentName, char * message, Color color) {
     LogDebug("DrawComponent %s", componentName);
-    char * str = malloc(strlen(componentName) + strlen(message) + 15);
-    sprintf(str, " to [%s, l_=$%s$] ", componentName, message);
+    char * str = malloc(strlen(componentName) + strlen(message) + 30);
+    char * colorString;
+    if (color == RED) {
+        colorString = "red";
+    } else if (color == BLUE) {
+        colorString = "blue";
+    } else if (color == GREEN) {
+        colorString = "green";
+    } else {
+        colorString = "black";
+    }
+
+    sprintf(str, " to [%s, l_=$%s$, color=%s] ", componentName, message, colorString);
     return str;
 }
 
-char * DrawComponentType(ComponentType componentType, char * message){
+char * DrawComponentType(Component * component){
+    char * message = GetComponentMessage(component);
     char * str;
-    switch(componentType) {
+    switch(component->type) {
         case RESISTOR:
-            str = DrawComponent("R", message);
+            str = DrawComponent("R", message, component->color);
             break;
         case BATTERY:
-            str = DrawComponent("battery1", message);
+            str = DrawComponent("battery1", message, component->color);
             break;
         case CABLE:
-            str = DrawComponent("short", message);
+            str = DrawComponent("short", message, component->color);
             break;
         case INDUCTOR:
-            str = DrawComponent("L", message);
+            str = DrawComponent("L", message, component->color);
             break;
         case AMMETER:
-            str = DrawComponent("ammeter", message);
+            str = DrawComponent("ammeter", message, component->color);
             break;
         case VOLTMETER:
-            str = DrawComponent("voltmeter", message);
+            str = DrawComponent("voltmeter", message, component->color);
             break;
         case SWITCH:
-            str = DrawComponent("switch", message);
+            str = DrawComponent("switch", message, component->color);
             break;
         case CAPACITOR:
-            str = DrawComponent("C", message);
+            str = DrawComponent("C", message, component->color);
             break;
         case LED:
-            str = DrawComponent("led", message);
+            str = DrawComponent("led", message, component->color);
             break;
         default:
-            str = DrawComponent("short", message);
+            str = DrawComponent("short", message, component->color);
             break;
     }
     return str;
@@ -234,17 +258,16 @@ int PointToPointConnection(Buffer * buffer, Point p1, Point p2, Component * comp
     char * point1Str = PointToString(&p1);
     ConcatString(buffer, point1Str);
 
-    char * message = GetComponentMessage(component);
 
-    char * battery1 = DrawComponentType(component->type, message);
-    ConcatString(buffer, battery1);
+    char * componentString = DrawComponentType(component);
+    ConcatString(buffer, componentString);
 
     char * point2Str = PointToString(&p2);
     ConcatString(buffer, point2Str);
 
     ConcatStringWithLength(buffer, ";\n", 2);
 
-    free(battery1);
+    free(componentString);
     free(point1Str);
     free(point2Str);
     // TODO: free(message) when implemented correctly
@@ -307,18 +330,18 @@ char * GetComponentMessage(Component * component){
         }
     } else {
         Constant * constant = component->paramList->params.c;
-            if (constant->type == VALUE_INTEGER){
-                sprintf(str, "%d", constant->value.i);
-                ConcatString(buffer, str);
-            } else if (constant->type == VALUE_FLOAT) {
-                LogDebug("FLOAT: %f", constant->value.f);
-                sprintf(str, "%.*g", constant->value.f);
-                ConcatString(buffer, str);
-            } else {
-                if (constant->value.s != NULL) {
-                    ConcatStringWithLength(buffer, constant->value.s + 1, strlen(constant->value.s + 1) - 1);
-                }
+        if (constant->type == VALUE_INTEGER){
+            sprintf(str, "%d", constant->value.i);
+            ConcatString(buffer, str);
+        } else if (constant->type == VALUE_FLOAT) {
+            LogDebug("FLOAT: %f", constant->value.f);
+            sprintf(str, "%.*g", constant->value.f);
+            ConcatString(buffer, str);
+        } else {
+            if (constant->value.s != NULL) {
+                ConcatStringWithLength(buffer, constant->value.s + 1, strlen(constant->value.s + 1) - 1);
             }
+        }
     }
     return buffer->str;
 }
