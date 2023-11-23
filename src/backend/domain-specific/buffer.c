@@ -13,7 +13,6 @@ Buffer * BufferInit(){
     if (buf->str == NULL) {
         return NULL;
     }
-    // (buf->str)[0] = '\0';
     buf->currentLen = 0;
     buf->maxLen = BUFFER_BLOCK;
 
@@ -37,7 +36,6 @@ int ConcatString(Buffer * buf, char * string){
 
 int ConcatStringWithLength(Buffer * buf, char * string, int length){
     if (!(buf->maxLen > buf->currentLen + length + 1)) {
-        LogDebug("Attempting ConcatStringWithLength realloc");
         LogDebug("maxLen = %d, currentLen = %d, length = %d", buf->maxLen, buf->currentLen, length);
         int newLen = buf->maxLen + BUFFER_BLOCK + length + 1;
         buf->str = realloc(buf->str, newLen);
@@ -47,7 +45,6 @@ int ConcatStringWithLength(Buffer * buf, char * string, int length){
         }
         buf->maxLen = newLen;
     }
-    //strcpy(buf->str + buf->currentLen, string);
     strncat(buf->str, string, length);
     buf->currentLen += length;
     return 0;

@@ -64,7 +64,6 @@ include_directories(src/backend/semantic-analysis/)
 add_executable(Compiler
 	src/main.c
 	src/backend/code-generation/generator.c
-	src/backend/domain-specific/calculator.c
 	src/backend/domain-specific/mesh.c
 	src/backend/domain-specific/buffer.c
 	src/backend/support/logger.c

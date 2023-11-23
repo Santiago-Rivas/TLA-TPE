@@ -204,7 +204,7 @@ char * DrawComponent(char * componentName, char * message, Color color) {
     char * str = malloc(strlen(componentName) + strlen(message) + 30);
     if (str == NULL) {
         LogDebug("Memory allocation failed in DrawComponent");
-        return NULL; // or handle the error in an appropriate way
+        return NULL;
     }
 
     char * colorString;
@@ -287,7 +287,6 @@ int PointToPointConnection(Buffer * buffer, Point p1, Point p2, Component * comp
     free(componentString);
     free(point1Str);
     free(point2Str);
-    // TODO: free(message) when implemented correctly
 
     return 1;
 }
@@ -296,7 +295,6 @@ int CheckPointRealloc(char ** str, int i) {
     if ((i % 10) == 0) {
         char *temp = realloc(*str, (i + 10) * sizeof(char));
         if (temp == NULL) {
-            // Handle realloc failure, e.g., log an error message or return an error code
             return 0;
         }
         *str = temp;
@@ -304,7 +302,6 @@ int CheckPointRealloc(char ** str, int i) {
     return 1;
 }
 
-// Fix implementation
 char * PointToString(Point * point) {
     char *str = malloc(20);
     if (str == NULL) {

@@ -48,7 +48,6 @@ Program *ProgramGrammarAction(MeshItemNode *meshes) {
 }
 
 Program * ProgramVariableGrammarAction(int variableCreationReturn, MeshItemNode * meshes) {
-    LogDebug("Variable Exists check %d", variableCreationReturn);
     if (variableCreationReturn == 0) {
         LogDebug("Variable Exists");
         state.succeed = false;
@@ -147,13 +146,11 @@ ComponentParams * ConstantGrammarAction(Value value, ValueType type) {
 }
 
 MeshItemNode *MeshGrammarAction(MeshItem * meshItem, MeshItemType type, Color color) {
-    LogDebug("Entered MeshGrammarAction");
     MeshItemNode *meshItemNode = calloc(1, sizeof(MeshItemNode));
     if (meshItemNode == NULL) {
         return NULL;
     }
     if (type == MESH_IDENTIFIER) {
-        LogDebug("MESH_IDENTIFIER");
         Comp * comp = get_variable(state.map, meshItem->s);
         if (comp == NULL) {
             return NULL;
